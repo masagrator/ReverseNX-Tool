@@ -35,11 +35,16 @@ int main(int argc, char **argv)
 					else {
 						while(1)
 						{
+							hidScanInput();
+							u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
 							printf("Unable to delete the file.\n");
 							printf("Press A to exit.\n");
 							if (loops == 0) consoleUpdate(NULL);
 							loops = 1;
-							if (kDown & KEY_A) return 0;
+							if (kDown & KEY_A) {
+								consoleExit(NULL);
+								return 0;
+							}
 						}
 					}
 			}
