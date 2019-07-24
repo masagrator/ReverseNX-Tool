@@ -74,11 +74,11 @@ int main(int argc, char **argv)
 		printf("Detected handheld global flag.\n");
 		handheld = 1;
 	}
-	else printf("No global flag detected.\n");
+	else printf("No global flag detected. ReverseNX disabled.\n");
 	fclose(handheld_flag_global);
 	fclose(docked_flag_global);
 	printf("What global flag you want to set? X - Exit\n");
-	printf("A - Docked, B - Handheld.\n\n");
+	printf("A - Docked, B - Handheld, Y - Disable.\n\n");
 
     // Main loop
     while(appletMainLoop())
@@ -106,6 +106,16 @@ int main(int argc, char **argv)
 				handheld = 1;
 				docked = 0;
 				printf("Handheld flag set.\n");
+			}
+		}
+		else if (kDown & KEY_Y) {
+			if ((handheld == 0) && (docked == 0)) printf("It's already disabled!\n");
+			else if ((handheld != 0) || (docked != 0)) {
+				if (docked == 1) remove("sdmc:/SaltySD/plugins/ReverseNX/docked.flag");
+				if (handheld == 1) remove("sdmc:/SaltySD/plugins/ReverseNX/handheld.flag");
+				handheld = 0;
+				docked = 0;
+				printf("ReverseNX disabled.\n");
 			}
 		}
 
