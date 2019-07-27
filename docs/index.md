@@ -10,7 +10,7 @@ Tool has two operation modes: `global` and `titleid`. If you want to change oper
 
 # global
 
-Global mode is set by default. Sets **Docked** or **Handheld** performance mode for every game that you will boot (with **docked** as default).
+global mode is set by default. Sets **Docked** or **Handheld** performance mode for every game that you will boot (with **docked** as default).
 
 ![global image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/global.jpg?raw=true)
 
@@ -28,7 +28,7 @@ If you want to disable forcing performance mode, you need to press **Y**.
 
 # titleid
 
-Titleid mode sets docked or handheld performance mode for each game separately.
+titleid mode sets docked or handheld performance mode for each game separately.
 
 ![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/titleid.jpg?raw=true)
 
