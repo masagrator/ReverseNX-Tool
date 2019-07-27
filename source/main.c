@@ -7,6 +7,12 @@
 int main(int argc, char **argv)
 {
     consoleInit(NULL);
+	DIR* flags_dir = opendir("sdmc:/SaltySD/flags");
+	if (!flags_dir) {
+		closedir(flags_dir);
+		mkdir("sdmc:/SaltySD/flags", ACCESSPERMS);
+	}
+	else closedir(flags_dir);
 	FILE *titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
 	
 	if (titleid) {
