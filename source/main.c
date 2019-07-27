@@ -12,12 +12,19 @@ int main(int argc, char **argv)
 		closedir(flags_dir);
 		mkdir("sdmc:/SaltySD/flags", ACCESSPERMS);
 	}
+	else closedir(flags_dir);
 	DIR* flags_reversenx_dir = opendir("sdmc:/SaltySD/flags/ReverseNX");
 	if (!flags_reversenx_dir) {
 		closedir(flags_reversenx_dir);
 		mkdir("sdmc:/SaltySD/flags/ReverseNX", ACCESSPERMS);
 	}
-	else closedir(flags_dir);
+	else closedir(flags_reversenx_dir);
+	DIR* reversenx_dir = opendir("sdmc:/SaltySD/plugins/ReverseNX");
+	if (!reversenx_dir) {
+		closedir(reversenx_dir);
+		mkdir("sdmc:/SaltySD/plugins/ReverseNX", ACCESSPERMS);
+	}
+	else closedir(reversenx_dir);
 	FILE *titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
 	
 	if (titleid) {
