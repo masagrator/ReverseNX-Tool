@@ -14,9 +14,11 @@ global mode is set by default. Sets **Docked** or **Handheld** performance mode 
 
 ![global image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/global.jpg?raw=true)
 
-"No global flag detected. ReverseNX disabled" means that plugin is not forcing docked or handheld mode at this moment.
-"Detected docked global flag" means that plugin is forcing docked performance mode.
-"Detected handheld global flag" means that plugin is forcing handheld performance mode.
+>"No global flag detected. ReverseNX disabled" means that plugin is not forcing docked or handheld mode at this moment.
+>
+>"Detected docked global flag" means that plugin is forcing docked performance mode.
+>
+>"Detected handheld global flag" means that plugin is forcing handheld performance mode.
 
 If you want to force one of performance modes, you need to press
 
@@ -36,9 +38,11 @@ titleid mode sets docked or handheld performance mode for each game separately.
 
 **It's not a manager of flags for games!** It only creates flag for ReverseNX that will force it to set chosen performance mode for first game it will boot. After creating flag for performance mode it will delete any sign of changing performance mode. So after booting game you need to again set new performance mode in titleid mode if you want to change flag for the same game or for different game.
 
-"No change flag detected. ReverseNX-Tool disabled" means that ReverseNX will not change performance mode for next game you will boot.
-"Detected docked titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
-"Detected handheld titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
+>"No change flag detected. ReverseNX-Tool disabled" means that ReverseNX will not change performance mode for next game you will boot.
+>
+>"Detected docked titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
+>
+>"Detected handheld titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
 
 If you want to change it, press
 
