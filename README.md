@@ -36,7 +36,7 @@ titleid mode sets docked or handheld performance mode for each game separately.
 
 ![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/titleid.jpg?raw=true)
 
-**It's not a manager of flags for games!** It only informs ReverseNX to create needed files in correct folders for first game you will boot and it will stay in that way. After booting first game you need to set again new performance mode if you want to change already set performance modes or create a new one. [So changing performance mode works only for first game you will boot after changing performance mode in titleid mode!]
+**It's not a manager of flags for games!** It only informs ReverseNX to create needed files in correct folders for first game you will boot and it will stay in that way. After booting first game you need to set again new performance mode if you want to change already set performance modes or create a new one. _So changing performance mode works only for first game you will boot after changing performance mode in titleid mode!_
 
 >"No change flag detected. ReverseNX-Tool disabled" means that ReverseNX will not change performance mode for next game you will boot.
 >
