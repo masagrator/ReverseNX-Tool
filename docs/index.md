@@ -42,7 +42,7 @@ titleid mode sets docked or handheld performance mode for each game separately.
 >
 >"Detected docked titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
 >
->"Detected handheld titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
+>"Detected handheld titleid flag" means that ReverseNX will change performance mode to **handheld** for next game you will boot.
 
 If you want to change it, press
 
