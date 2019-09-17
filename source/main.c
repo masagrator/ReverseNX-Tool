@@ -1,8 +1,66 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <dirent.h>
 
 #include <switch.h>
+
+void renametocheatstemp() {
+	char cheatspath[64];
+	char cheatspathtemp[64];
+	DIR *dirp;
+	struct dirent *dp;
+	while(1) {
+		dirp = opendir("sdmc:/Atmosphere/titles/");
+		while (dirp) {
+			if ((dp = readdir(dirp)) != NULL) {
+				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/titles/%s/cheats", dp->d_name);
+				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
+				rename(cheatspath, cheatspathtemp);
+				printf(".");
+				consoleUpdate(NULL);
+				char cheatspath = "";
+				char cheatspathtemp = "";
+			}
+			else {
+				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "w");
+				fclose(renametocheats);
+				closedir(dirp);
+				return;
+			}
+		}
+		closedir(dirp);
+		return;
+	}
+}
+
+void renametocheats() {
+	char cheatspath[64];
+	char cheatspathtemp[64];
+	DIR *dirp;
+	struct dirent *dp;
+	while(1) {
+		dirp = opendir("sdmc:/Atmosphere/titles/");
+		while (dirp) {
+			if ((dp = readdir(dirp)) != NULL) {
+				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/titles/%s/cheats", dp->d_name);
+				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
+				rename(cheatspathtemp, cheatspath);
+				printf(".");
+				consoleUpdate(NULL);
+				char cheatspath = "";
+				char cheatspathtemp = "";
+			}
+			else {
+				closedir(dirp);
+				remove("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag");
+				return;
+			}
+		}
+		closedir(dirp);
+		return;
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -50,14 +108,21 @@ disable:
 disabled:
 	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n");
 	printf("To enable loading ReverseNX, press A.\n");
+	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	if (cheats1 == NULL) printf("To disable cheats, press B.\n");
+	else printf("To enable cheats, press B.\n");
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
     while(appletMainLoop())
     {	
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) break;
+        if (kDown & KEY_X) {
+			fclose(cheats1);
+			goto close;
+		}
 		else if (kDown & KEY_A) {
+			fclose(cheats1);
 			remove("sdmc:/SaltySD/flags/disable.flag");
 			consoleClear();
 			titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
@@ -69,6 +134,19 @@ disabled:
 				fclose(titleid);
 				goto global_1;
 			}
+		}
+		else if (kDown & KEY_B) {
+			if (cheats1 == NULL) {
+				fclose(cheats1);
+				renametocheatstemp();
+				consoleClear();
+			}
+			else {
+				fclose(cheats1);
+				renametocheats();
+				consoleClear();
+			}
+			goto disabled;
 		}
 	}
 	goto close;
