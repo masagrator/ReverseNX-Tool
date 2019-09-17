@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.1**, ReverseNX **0.32**
+This doc has been made for releases: ReverseNX-Tool **1.2**, ReverseNX **0.33**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier (titleid mode is not compatible with older releases of ReverseNX). 
 
@@ -6,7 +6,7 @@ https://github.com/masagrator/ReverseNX
 
 -------------
 
-Tool has two operation modes: `global` and `titleid`. If you want to change operation mode, press **+** button.
+Tool has three operation modes: `global`, `titleid` and `disabled`. If you want to change modes between `global` and `titleid`, press **+** button. If you want to disable loading ReverseNX, press **ZR**.
 
 # global
 
@@ -25,8 +25,6 @@ If you want to force one of performance modes, you need to press
 **A** for Docked mode
 
 **B** for Handheld mode
-
-If you want to disable forcing performance mode, you need to press **Y**.
 
 -------------
 
@@ -51,3 +49,15 @@ If you want to change it, press
 **B** for Handheld mode
 
 If you want to bring default settings for game, press **Y**.
+
+---
+
+# disabled
+
+Disabled mode locks loading plugins from SaltySD/plugins folder. 
+
+![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled.jpg?raw=true)
+
+With my fork of SaltyNX in ReverseNX 0.33+ release we can avoid crashing games with cheats in this mode.
+
+To turn off disabled mode, press **A**.
