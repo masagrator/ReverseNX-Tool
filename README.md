@@ -1,6 +1,6 @@
 This doc has been made for releases: ReverseNX-Tool **1.2**, ReverseNX **0.33**
 
-ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier (titleid mode is not compatible with older releases of ReverseNX). 
+ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
 https://github.com/masagrator/ReverseNX
 
