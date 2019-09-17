@@ -106,7 +106,7 @@ disable:
 	goto disabled;
 
 disabled:
-	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n\n");
+	printf("Loading ReverseNX is disabled.\n\n");
 	printf("To enable loading ReverseNX, press A.\n");
 	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
 	if (cheats1 == NULL) printf("To disable cheats, press B.\n\n");
@@ -192,16 +192,35 @@ titleid_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
-	printf("Y - Reset settings\n\n");	
+	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats\n\n");	
+	else printf("Y - Reset settings\tZL - Enable cheats\n\n");	
 
     // Main loop
     while(appletMainLoop())
     {
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) break;
+        if (kDown & KEY_X) {
+			fclose(cheats2);
+			break;
+		}
+		else if (kDown & KEY_ZL) {
+			if (cheats2 == NULL) {
+				fclose(cheats2);
+				renametocheatstemp();
+				consoleClear();
+			}
+			else {
+				fclose(cheats2);
+				renametocheats();
+				consoleClear();
+			}
+			goto titleid_1;
+		}
 		else if (kDown & KEY_ZR) {
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
+			fclose(cheats2);
 			fclose(disable_flag);
 			goto disable;
 		}
@@ -250,6 +269,7 @@ titleid_1:
 				if (handheld_titleid == 1) remove("sdmc:/SaltySD/flags/ReverseNX/createhandheld.flag");
 				if (remove_titleid == 1) remove("sdmc:/SaltySD/flags/ReverseNX/createremove.flag");
 			}
+			fclose(cheats2);
 			fclose(titleid);
 			remove("sdmc:/SaltySD/flags/ReverseNX/titleid.flag");
 			consoleClear();
@@ -289,17 +309,37 @@ global_1:
 	fclose(handheld_flag_global);
 	fclose(docked_flag_global);
 	printf("What global flag you want to set?\n\n");
-	printf("Profiles:\t\t\t\t\tOptions:\n");	
-	printf("A - Docked\t\t\t\t\tX - Exit\n");
-	printf("B - Handheld\t\t\t\tZR - Disable loading ReverseNX\n\n");
+	printf("Profiles:\t\t\t\tOptions:\n");	
+	printf("A - Docked\t\t\t\tX - Exit\n");
+	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
+	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats\n\n");	
+	else printf("\t\t\t\t\t\t\tZL - Enable cheats\n\n");	
 
     // Main loop
     while(appletMainLoop())
     {
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) break;
+        if (kDown & KEY_X) {
+			fclose(cheats3);
+			break;
+		}
+		else if (kDown & KEY_ZL) {
+			if (cheats3 == NULL) {
+				fclose(cheats3);
+				renametocheatstemp();
+				consoleClear();
+			}
+			else {
+				fclose(cheats3);
+				renametocheats();
+				consoleClear();
+			}
+			goto global_1;
+		}
 		else if (kDown & KEY_ZR) {
+			fclose(cheats3);
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
 			fclose(disable_flag);
 			goto disable;
@@ -327,6 +367,7 @@ global_1:
 			}
 		}
 		else if (kDown & KEY_PLUS) {
+				fclose(cheats3);
 				fclose(titleid);
 				titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "w");
 				fclose(titleid);
