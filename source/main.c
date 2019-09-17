@@ -104,9 +104,9 @@ titleid_1:
 	fclose(remove_flag_titleid);
 	printf("What titleid flag you want to set?\n\n");
 	printf("It will be applied only to first game You will boot.\n\n");
-	printf("Profiles:           Options:\n");	
-	printf("A - Docked          X - Exit\n");
-	printf("B - Handheld        ZR - Disable loading ReverseNX\n");
+	printf("Profiles:\t\t\t\tOptions:\n");	
+	printf("A - Docked\t\t\t\tX - Exit\n");
+	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
 	printf("Y - Reset settings\n\n");	
 
     // Main loop
@@ -206,10 +206,9 @@ global_1:
 	fclose(handheld_flag_global);
 	fclose(docked_flag_global);
 	printf("What global flag you want to set?\n\n");
-	printf("Profiles:           Options:\n");	
-	printf("A - Docked          X - Exit\n");
-	printf("B - Handheld        ZR - Disable loading ReverseNX\n");
-	printf("Y - Disable global mode\n\n");
+	printf("Profiles:\t\t\t\t\tOptions:\n");	
+	printf("A - Docked\t\t\t\t\tX - Exit\n");
+	printf("B - Handheld\t\t\t\tZR - Disable loading ReverseNX\n\n");
 
     // Main loop
     while(appletMainLoop())
@@ -242,16 +241,6 @@ global_1:
 				handheld = 1;
 				docked = 0;
 				printf("Handheld flag set.\n");
-			}
-		}
-		else if (kDown & KEY_Y) {
-			if ((handheld == 0) && (docked == 0)) printf("It's already disabled!\n");
-			else if ((handheld != 0) || (docked != 0)) {
-				if (docked == 1) remove("sdmc:/SaltySD/plugins/ReverseNX/docked.flag");
-				if (handheld == 1) remove("sdmc:/SaltySD/plugins/ReverseNX/handheld.flag");
-				handheld = 0;
-				docked = 0;
-				printf("ReverseNX disabled.\n");
 			}
 		}
 		else if (kDown & KEY_PLUS) {
