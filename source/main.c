@@ -26,13 +26,46 @@ int main(int argc, char **argv)
 	}
 	else closedir(reversenx_dir);
 	FILE *titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
-	
-	if (titleid) {
+	FILE *disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "r");
+	goto start;
+
+start:
+	if (disable_flag) {
+		fclose(disable_flag);
+		goto disabled;
+	}
+	else if (titleid) {
 		printf("Detected titleid.flag.\n");
+		fclose(titleid);
 		goto titleid_1;
 	}
 	else goto global_1;
+	
+disable:
+	consoleExit(NULL);
+	goto disabled;
 
+disabled:
+	consoleInit(NULL);
+	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n");
+	printf("To enable loading ReverseNX, press A.\n");
+	printf("Press X to exit.\n");
+	consoleUpdate(NULL);
+    while(appletMainLoop())
+    {	
+		hidScanInput();
+		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        if (kDown & KEY_X) break;
+		else if (kDown & KEY_A) {
+			remove("sdmc:/SaltySD/flags/disable.flag");
+			consoleExit(NULL);
+			consoleInit(NULL);
+			disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "r");
+			goto start;
+		}
+	}
+	goto close;
+			
 titleid_1:
 	printf("Titleid mode set. Press + to change mode to global.\n\n");
 	FILE *handheld_flag_titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/createhandheld.flag", "r");
@@ -71,7 +104,10 @@ titleid_1:
 	fclose(remove_flag_titleid);
 	printf("What titleid flag you want to set?\n\n");
 	printf("It will be applied only to first game You will boot.\n\n");
-	printf("A - Docked, B - Handheld, Y - Reset settings, X - Exit.\n\n");
+	printf("Profiles:           Options:\n");	
+	printf("A - Docked          X - Exit\n");
+	printf("B - Handheld        ZR - Disable loading ReverseNX\n");
+	printf("Y - Reset settings\n\n");	
 
     // Main loop
     while(appletMainLoop())
@@ -79,6 +115,11 @@ titleid_1:
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         if (kDown & KEY_X) break;
+		else if (kDown & KEY_ZR) {
+			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
+			fclose(disable_flag);
+			goto disable;
+		}
 		else if (kDown & KEY_A) {
 			if (docked_titleid == 1) printf("You have already docked flag!\n");
 			else if (docked_titleid == 0) {
@@ -165,7 +206,10 @@ global_1:
 	fclose(handheld_flag_global);
 	fclose(docked_flag_global);
 	printf("What global flag you want to set?\n\n");
-	printf("A - Docked, B - Handheld, Y - Disable, X - Exit.\n\n");
+	printf("Profiles:           Options:\n");	
+	printf("A - Docked          X - Exit\n");
+	printf("B - Handheld        ZR - Disable loading ReverseNX\n");
+	printf("Y - Disable global mode\n\n");
 
     // Main loop
     while(appletMainLoop())
@@ -173,6 +217,11 @@ global_1:
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         if (kDown & KEY_X) break;
+		else if (kDown & KEY_ZR) {
+			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
+			fclose(disable_flag);
+			goto disable;
+		}
 		else if (kDown & KEY_A) {
 			if (docked == 1) printf("You have already docked flag!\n");
 			else if (docked == 0) {
