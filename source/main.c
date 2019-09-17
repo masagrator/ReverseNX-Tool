@@ -44,11 +44,10 @@ start:
 	else goto global_1;
 	
 disable:
-	consoleExit(NULL);
+	consoleClear();
 	goto disabled;
 
 disabled:
-	consoleInit(NULL);
 	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n");
 	printf("To enable loading ReverseNX, press A.\n");
 	printf("Press X to exit.\n");
@@ -60,8 +59,7 @@ disabled:
         if (kDown & KEY_X) break;
 		else if (kDown & KEY_A) {
 			remove("sdmc:/SaltySD/flags/disable.flag");
-			consoleExit(NULL);
-			consoleInit(NULL);
+			consoleClear();
 			titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
 			if (titleid) {
 				fclose(titleid);
@@ -176,8 +174,7 @@ titleid_1:
 			}
 			fclose(titleid);
 			remove("sdmc:/SaltySD/flags/ReverseNX/titleid.flag");
-			consoleExit(NULL);
-			consoleInit(NULL);
+			consoleClear();
 			goto global_1;
 			}
 
@@ -255,8 +252,7 @@ global_1:
 				fclose(titleid);
 				titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "w");
 				fclose(titleid);
-				consoleExit(NULL);
-				consoleInit(NULL);
+				consoleClear();
 				goto titleid_1;
 			}
 
