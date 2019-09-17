@@ -106,11 +106,11 @@ disable:
 	goto disabled;
 
 disabled:
-	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n");
+	printf("Loading ReverseNX is disabled. In this mod mode you can use cheats.\n\n");
 	printf("To enable loading ReverseNX, press A.\n");
 	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
-	if (cheats1 == NULL) printf("To disable cheats, press B.\n");
-	else printf("To enable cheats, press B.\n");
+	if (cheats1 == NULL) printf("To disable cheats, press B.\n\n");
+	else printf("To enable cheats, press B.\n\n");
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
     while(appletMainLoop())
