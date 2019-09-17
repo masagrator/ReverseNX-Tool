@@ -32,10 +32,12 @@ int main(int argc, char **argv)
 start:
 	if (disable_flag) {
 		fclose(disable_flag);
+		fclose(titleid);
 		goto disabled;
 	}
 	else if (titleid) {
 		printf("Detected titleid.flag.\n");
+		fclose(disable_flag);
 		fclose(titleid);
 		goto titleid_1;
 	}
@@ -60,8 +62,15 @@ disabled:
 			remove("sdmc:/SaltySD/flags/disable.flag");
 			consoleExit(NULL);
 			consoleInit(NULL);
-			disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "r");
-			goto start;
+			titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
+			if (titleid) {
+				fclose(titleid);
+				goto titleid_1;
+			}
+			else {
+				fclose(titleid);
+				goto global_1;
+			}
 		}
 	}
 	goto close;
@@ -169,8 +178,7 @@ titleid_1:
 			remove("sdmc:/SaltySD/flags/ReverseNX/titleid.flag");
 			consoleExit(NULL);
 			consoleInit(NULL);
-			u8 global = 1;
-			if (global == 1) goto global_1;
+			goto global_1;
 			}
 
         consoleUpdate(NULL);
@@ -245,11 +253,11 @@ global_1:
 		}
 		else if (kDown & KEY_PLUS) {
 				fclose(titleid);
-				fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "w");
+				titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "w");
+				fclose(titleid);
 				consoleExit(NULL);
 				consoleInit(NULL);
-				u8 titleidu8 = 1;
-				if (titleidu8 == 1) goto titleid_1;
+				goto titleid_1;
 			}
 
         consoleUpdate(NULL);
