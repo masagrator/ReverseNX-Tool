@@ -14,8 +14,6 @@ global mode is set by default. Sets **Docked** or **Handheld** performance mode 
 
 ![global image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/global.jpg?raw=true)
 
->"No global flag detected. ReverseNX disabled" means that plugin is not forcing docked or handheld mode at this moment.
->
 >"Detected docked global flag" means that plugin is forcing docked performance mode.
 >
 >"Detected handheld global flag" means that plugin is forcing handheld performance mode.
