@@ -7,9 +7,13 @@ https://github.com/masagrator/ReverseNX
 -------------
 
 Tool has three operation modes: `global`, `titleid` and `disabled`.
+
 For `global` and `titleid` modes:
+
 If you want to change modes, press **+** button. 
+
 If you want to disable loading ReverseNX, press **ZR**.
+
 If you want to disable loading cheats on boot in Atmosphere, press **ZL**.
 
 # global
