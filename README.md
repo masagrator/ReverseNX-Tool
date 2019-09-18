@@ -67,3 +67,19 @@ Disabled mode locks loading plugins from SaltySD/plugins folder.
 To turn off disabled mode, press **A**.
 
 To change cheats state, press **B**.
+
+---
+
+# How to use cheats
+
+Cheats loaded by Atmosphere when game is booting are crashing OS. To avoid it I added to ReverseNX-Tool function for renaming cheats folders in Atmosphere/titles.
+
+If you want to use ReverseNX with cheats, You need to go in this order:
+
+>Disable Cheats in ReverseNX-Tool
+>
+>Run game and wait for first sign of game loading after Nintendo logo will disappear
+>
+>Enable Cheats in ReverseNX-Tool
+>
+>Use Edizon or Checkpoint to apply cheats
