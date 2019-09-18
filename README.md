@@ -60,8 +60,6 @@ Disabled mode locks loading plugins from SaltySD/plugins folder.
 
 ![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled.jpg?raw=true)
 
-With my fork of SaltyNX in ReverseNX 0.33+ release we can avoid crashing games with cheats in this mode.
-
 To turn off disabled mode, press **A**.
 
 To change cheats state, press **B**.
