@@ -6,7 +6,11 @@ https://github.com/masagrator/ReverseNX
 
 -------------
 
-Tool has three operation modes: `global`, `titleid` and `disabled`. If you want to change modes between `global` and `titleid`, press **+** button. If you want to disable loading ReverseNX, press **ZR**.
+Tool has three operation modes: `global`, `titleid` and `disabled`.
+For `global` and `titleid` modes:
+If you want to change modes, press **+** button. 
+If you want to disable loading ReverseNX, press **ZR**.
+If you want to disable loading cheats on boot in Atmosphere, press **ZL**.
 
 # global
 
@@ -59,3 +63,5 @@ Disabled mode locks loading plugins from SaltySD/plugins folder.
 With my fork of SaltyNX in ReverseNX 0.33+ release we can avoid crashing games with cheats in this mode.
 
 To turn off disabled mode, press **A**.
+
+To change cheats state, press **B**.
