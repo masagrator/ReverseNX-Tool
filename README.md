@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.2**, ReverseNX **0.33**
+This doc has been made for releases: ReverseNX-Tool **1.3**, ReverseNX **0.33**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
