@@ -14,7 +14,7 @@ If you want to change modes, press **+** button.
 
 If you want to disable loading ReverseNX, press **ZR**. It will go to disabled mode.
 
-If you want to disable loading cheats on boot in Atmosphere, press **ZL**.
+If you want to disable loading cheats on game boot in Atmosphere, press **ZL**.
 
 # global
 
