@@ -109,8 +109,8 @@ disabled:
 	printf("Loading ReverseNX is disabled.\n\n");
 	printf("To enable loading ReverseNX, press A.\n");
 	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
-	if (cheats1 == NULL) printf("To disable cheats, press B.\n\n");
-	else printf("To enable cheats, press B.\n\n");
+	if (cheats1 == NULL) printf("To disable cheats (Atmosphere only), press B.\n\n");
+	else printf("To enable cheats (Atmosphere only), press B.\n\n");
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
     while(appletMainLoop())
@@ -193,8 +193,8 @@ titleid_1:
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
 	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
-	if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats\n\n");	
-	else printf("Y - Reset settings\tZL - Enable cheats\n\n");	
+	if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats (Atmosphere only)\n\n");	
+	else printf("Y - Reset settings\tZL - Enable cheats (Atmosphere only)\n\n");	
 
     // Main loop
     while(appletMainLoop())
@@ -313,8 +313,8 @@ global_1:
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
 	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
-	if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats\n\n");	
-	else printf("\t\t\t\t\t\t\tZL - Enable cheats\n\n");	
+	if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats (Atmosphere only)\n\n");	
+	else printf("\t\t\t\t\t\t\tZL - Enable cheats (Atmosphere only)\n\n");	
 
     // Main loop
     while(appletMainLoop())
