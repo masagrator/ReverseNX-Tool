@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.3**, ReverseNX **0.33**
+This doc has been made for releases: ReverseNX-Tool **1.31**, ReverseNX **0.33**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
@@ -72,7 +72,7 @@ To change cheats state, press **B**.
 
 # How to use cheats
 
-Cheats loaded by Atmosphere when game is booting are crashing OS. To avoid it I added to ReverseNX-Tool function for renaming cheats folders in Atmosphere/titles.
+Cheats loaded by Atmosphere when game is booting are crashing OS. To avoid it I added to ReverseNX-Tool function for renaming cheats folders in Atmosphere/titles and in Atmosphere/contents.
 
 If you want to use ReverseNX with cheats, You need to go in this order:
 
