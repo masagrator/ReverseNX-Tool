@@ -62,7 +62,7 @@ If you want to bring default settings for game, press **Y**.
 
 Disabled mode locks loading plugins from SaltySD/plugins folder. 
 
-![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled.jpg?raw=true)
+![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled2.jpg?raw=true)
 
 To turn off disabled mode, press **A**.
 
