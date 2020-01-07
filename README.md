@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.31**, ReverseNX **0.33**
+This doc has been made for releases: ReverseNX-Tool **1.32**, ReverseNX **0.33**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
@@ -83,3 +83,10 @@ If you want to use ReverseNX with cheats, You need to go in this order:
 >Enable Cheats in ReverseNX-Tool
 >
 >Use Edizon or Checkpoint to apply cheats
+
+---
+
+# Troubleshooting
+
+If SaltyNX was not properly injected, then .log file in SaltySD sdcard folder is not created/updated and ReverseNX-Tool will show prints in red color with first line saying everything. This means that files from ReverseNX release are not copied properly to sdcard or that CFW has issues with loading files to memory.
+![error_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/error.jpg?raw=true)
