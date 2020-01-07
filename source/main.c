@@ -5,6 +5,21 @@
 
 #include <switch.h>
 
+bool CheckPort () {
+	Result ret;
+	Handle saltysd;
+    for (int i = 0; i < 200; i++)
+    {
+        ret = svcConnectToNamedPort(&saltysd, "SaltySD");
+        svcSleepThread(1000*1000);
+        
+        if (!ret) break;
+    }
+	svcCloseHandle(saltysd);
+	if (ret != 0x0) return false;
+	else return true;
+}
+
 void renametocheatstemp() {
 	renametocheatstempcontents();
 	char cheatspath[64];
@@ -153,7 +168,6 @@ start:
 		goto disabled;
 	}
 	else if (titleid) {
-		printf("Detected titleid.flag.\n");
 		fclose(disable_flag);
 		fclose(titleid);
 		goto titleid_1;
@@ -164,7 +178,12 @@ disable:
 	consoleClear();
 	goto disabled;
 
+bool inj;
+
 disabled:
+	inj = CheckPort();
+	if (inj == true) printf("SaltyNX is injected properly.\n");
+	else printf(CONSOLE_RED "SaltyNX is not injected!!\n");
 	printf("Loading ReverseNX is disabled.\n\n");
 	printf("To enable loading ReverseNX, press A.\n");
 	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
@@ -211,6 +230,8 @@ disabled:
 	goto close;
 			
 titleid_1:
+	inj = CheckPort();
+	if (inj != true) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
 	printf("Titleid mode set. Press + to change mode to global.\n\n");
 	FILE *handheld_flag_titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/createhandheld.flag", "r");
 	FILE *docked_flag_titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/createdock.flag", "r");
@@ -340,6 +361,8 @@ titleid_1:
 	goto close;
 
 global_1:
+	inj = CheckPort();
+	if (inj != true) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
 	printf("Global mode set. Press + to change mode to titleid.\n\n");
 	FILE *handheld_flag_global = fopen("sdmc:/SaltySD/plugins/ReverseNX/handheld.flag", "r");
 	FILE *docked_flag_global = fopen("sdmc:/SaltySD/plugins/ReverseNX/docked.flag", "r");
