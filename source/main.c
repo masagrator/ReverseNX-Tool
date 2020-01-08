@@ -20,6 +20,37 @@ bool CheckPort () {
 	else return true;
 }
 
+uint64_t TID;
+
+bool CheckIfGameRunning() {
+	pmdmntInitialize();
+	pminfoInitialize();
+	uint64_t PID = 0;
+	
+	pmdmntGetApplicationProcessId(&PID);
+	pminfoGetProgramId(&TID, PID);
+	pminfoExit();
+	pmdmntExit();
+	if (TID == 0x0) return false;
+	else return true;
+}
+
+uint8_t GetRunningFlag() {
+	uint8_t flagcode = 0xFF;
+	char handheld_flag[128];
+	char docked_flag[128];
+	snprintf(handheld_flag, sizeof handheld_flag, "%s%llx%s", "sdmc:/SaltySD/plugins/0", TID, "/ReverseNX/handheld.flag");
+	snprintf(docked_flag, sizeof docked_flag, "%s%llx%s", "sdmc:/SaltySD/plugins/0", TID, "/ReverseNX/docked.flag");
+	FILE* handheld_titleid_flag = fopen(handheld_flag, "r");
+	FILE* docked_titleid_flag = fopen(docked_flag, "r");
+	if (((handheld_titleid_flag != NULL) && (docked_titleid_flag != NULL)) || ((handheld_titleid_flag == NULL) && (docked_titleid_flag == NULL))) flagcode = 0xFF;
+	else if (handheld_titleid_flag != NULL) flagcode = 0x0;
+	else if (docked_titleid_flag != NULL) flagcode = 0x1;
+	fclose(handheld_titleid_flag);
+	fclose(docked_titleid_flag);
+	return flagcode;
+}
+
 void renametocheatstemp() {
 	renametocheatstempcontents();
 	char cheatspath[64];
@@ -179,6 +210,8 @@ disable:
 	goto disabled;
 
 bool inj;
+bool Running;
+uint8_t flag = 2;
 
 disabled:
 	inj = CheckPort();
@@ -232,6 +265,14 @@ disabled:
 titleid_1:
 	inj = CheckPort();
 	if (inj != true) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	Running = CheckIfGameRunning();
+	if (Running == true) {
+		flag = GetRunningFlag();
+		if (flag = 0xFF) printf("Flag of game in background: not set.\n");
+		else if (flag = 0x0) printf("Flag of game in background: handheld.\n");
+		else if (flag = 0x1) printf("Flag of game in background: docked.\n");
+	}
+		
 	printf("Titleid mode set. Press + to change mode to global.\n\n");
 	FILE *handheld_flag_titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/createhandheld.flag", "r");
 	FILE *docked_flag_titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/createdock.flag", "r");
