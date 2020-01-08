@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.31**, ReverseNX **0.33**
+This doc has been made for releases: ReverseNX-Tool **1.33**, ReverseNX **0.34**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
@@ -38,7 +38,7 @@ If you want to force one of performance modes, you need to press
 
 titleid mode sets docked or handheld performance mode for each game separately.
 
-![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/titleid.jpg?raw=true)
+![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/titleid2.jpg?raw=true)
 
 **It's not a manager of flags for games!** It only informs ReverseNX to create needed files in correct folders for first game you will boot and it will stay in that way. After booting first game you need to set again new performance mode if you want to change already set performance modes or create a new one. **So changing performance mode works only for first game you will boot after setting performance mode in titleid operation mode of ReverseNX-Tool!**
 
@@ -55,6 +55,8 @@ If you want to change it, press
 **B** for Handheld mode
 
 If you want to bring default settings for game, press **Y**.
+
+When game is running, it will show at first line what flag is set in folder for this game.
 
 ---
 
@@ -83,3 +85,12 @@ If you want to use ReverseNX with cheats, You need to go in this order:
 >Enable Cheats in ReverseNX-Tool
 >
 >Use Edizon or Checkpoint to apply cheats
+
+---
+
+# Troubleshooting
+
+If SaltyNX was not injected properly or at all, you will see... Red Screen of Death.
+![error_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/error.jpg?raw=true)
+
+If you will see red text with first line "SaltyNX was not injected!!", check if files were copied properly. Otherwise it means CFW can't handle it.
