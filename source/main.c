@@ -10,7 +10,7 @@ bool CheckPort () {
 	Handle saltysd;
     for (int i = 0; i < 200; i++)
     {
-        ret = svcConnectToNamedPort(&saltysd, "SaltySD");
+        ret = svcConnectToNamedPort(&saltysd, "InjectServ");
         svcSleepThread(1000*1000);
         
         if (!ret) break;
