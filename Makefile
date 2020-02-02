@@ -43,7 +43,7 @@ SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
 APP_AUTHOR	:=	"MasaGratoR"
-APP_VERSION	:=	"1.3.3"
+APP_VERSION	:=	"1.3.4"
 #ROMFS	:=	romfs
 
 #---------------------------------------------------------------------------------
