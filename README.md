@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.33**, ReverseNX **0.34**
+This doc has been made for releases: ReverseNX-Tool **1.34**, ReverseNX **0.34**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
@@ -14,7 +14,7 @@ If you want to change modes, press **+** button.
 
 If you want to disable loading ReverseNX, press **ZR**. It will go to disabled mode.
 
-If you want to disable loading cheats on game boot in Atmosphere, press **ZL**.
+If you want to disable loading cheats on game boot in Atmosphere, press **ZL** (This option is hidden for other CFWs).
 
 # global
 
@@ -72,7 +72,7 @@ To change cheats state, press **B**.
 
 ---
 
-# How to use cheats
+# How to use cheats in Atmosphere
 
 Cheats loaded by Atmosphere when game is booting are crashing OS. To avoid it I added to ReverseNX-Tool function for renaming cheats folders in Atmosphere/titles and in Atmosphere/contents.
 
