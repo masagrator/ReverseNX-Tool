@@ -328,7 +328,7 @@ titleid_1:
 	printf("It will be applied only to first game You will boot.\n\n");
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
-	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
+	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
 	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
 	if (Atmosphere_present == true) {
 		if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats\n\n");	
@@ -456,7 +456,7 @@ global_1:
 	printf("What global flag you want to set?\n\n");
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
-	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
+	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
 	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
 	if (Atmosphere_present == true) {
 		if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats\n\n");	
