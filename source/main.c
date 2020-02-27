@@ -82,7 +82,7 @@ void renametocheatstemp() {
 				char cheatspathtemp = "";
 			}
 			else {
-				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "w");
+				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "w");
 				fclose(renametocheats);
 				closedir(dirp);
 				return;
@@ -111,7 +111,7 @@ void renametocheatstempcontents() {
 				char cheatspathtemp = "";
 			}
 			else {
-				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "w");
+				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "w");
 				fclose(renametocheats);
 				closedir(dirp);
 				return;
@@ -142,7 +142,7 @@ void renametocheats() {
 			}
 			else {
 				closedir(dirp);
-				remove("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag");
+				remove("sdmc:/SaltySD/flags/renametocheats.flag");
 				return;
 			}
 		}
@@ -170,7 +170,7 @@ void renametocheatscontents() {
 			}
 			else {
 				closedir(dirp);
-				remove("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag");
+				remove("sdmc:/SaltySD/flags/renametocheats.flag");
 				return;
 			}
 		}
@@ -231,9 +231,9 @@ disabled:
 	inj = CheckPort();
 	if (inj == true) printf("SaltyNX is injected properly.\n");
 	else printf(CONSOLE_RED "SaltyNX is not injected!!\n");
-	printf("Loading ReverseNX is disabled.\n\n");
-	printf("To enable loading ReverseNX, press A.\n");
-	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	printf("SaltyNX is disabled.\n\n");
+	printf("To enable SaltyNX and loading ReverseNX, press A.\n");
+	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
 	if (Atmosphere_present == true) {
 		if (cheats1 == NULL) printf("To disable cheats, press B.\n\n");
 		else printf("To enable cheats, press B.\n\n");
@@ -329,7 +329,7 @@ titleid_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
-	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
 	if (Atmosphere_present == true) {
 		if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats\n\n");	
 		else printf("Y - Reset settings\tZL - Enable cheats\n\n");	
@@ -457,7 +457,7 @@ global_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable loading ReverseNX\n");
-	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/ReverseNX/renametocheats.flag", "r");
+	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
 	if (Atmosphere_present == true) {
 		if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats\n\n");	
 		else printf("\t\t\t\t\t\t\tZL - Enable cheats\n\n");	
