@@ -232,7 +232,6 @@ disabled:
 	if (inj == true) printf("SaltyNX is injected properly.\n");
 	else printf(CONSOLE_RED "SaltyNX is not injected!!\n");
 	remove("sdmc:/SaltySD/FPSoffset.hex");
-	remove("sdmc:/SaltySD/FPSavgoffset.hex");
 	printf("SaltyNX is disabled.\n\n");
 	printf("To enable SaltyNX and loading ReverseNX, press A.\n");
 	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
