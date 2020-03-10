@@ -2,6 +2,8 @@ This doc has been made for releases: ReverseNX-Tool **1.35**, ReverseNX **0.34**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
+To use only in Applet mode. Title replacement mode in 99.9% of cases will block function responsible for checking if SaltyNX is alive.
+
 https://github.com/masagrator/ReverseNX
 
 -------------
