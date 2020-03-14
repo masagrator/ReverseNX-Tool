@@ -63,125 +63,8 @@ uint8_t GetRunningFlag() {
 	fclose(docked_titleid_flag);
 }
 
-void renametocheatstemp() {
-	renametocheatstempcontents();
-	char cheatspath[64];
-	char cheatspathtemp[64];
-	DIR *dirp;
-	struct dirent *dp;
-	while(1) {
-		dirp = opendir("sdmc:/Atmosphere/titles/");
-		while (dirp) {
-			if ((dp = readdir(dirp)) != NULL) {
-				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/titles/%s/cheats", dp->d_name);
-				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
-				rename(cheatspath, cheatspathtemp);
-				printf(".");
-				consoleUpdate(NULL);
-				char cheatspath = "";
-				char cheatspathtemp = "";
-			}
-			else {
-				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "w");
-				fclose(renametocheats);
-				closedir(dirp);
-				return;
-			}
-		}
-		closedir(dirp);
-		return;
-	}
-}
-
-void renametocheatstempcontents() {
-	char cheatspath[64];
-	char cheatspathtemp[64];
-	DIR *dirp;
-	struct dirent *dp;
-	while(1) {
-		dirp = opendir("sdmc:/Atmosphere/contents/");
-		while (dirp) {
-			if ((dp = readdir(dirp)) != NULL) {
-				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/contents/%s/cheats", dp->d_name);
-				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
-				rename(cheatspath, cheatspathtemp);
-				printf(".");
-				consoleUpdate(NULL);
-				char cheatspath = "";
-				char cheatspathtemp = "";
-			}
-			else {
-				FILE* renametocheats = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "w");
-				fclose(renametocheats);
-				closedir(dirp);
-				return;
-			}
-		}
-		closedir(dirp);
-		return;
-	}
-}
-
-void renametocheats() {
-	renametocheatscontents();
-	char cheatspath[64];
-	char cheatspathtemp[64];
-	DIR *dirp;
-	struct dirent *dp;
-	while(1) {
-		dirp = opendir("sdmc:/Atmosphere/titles/");
-		while (dirp) {
-			if ((dp = readdir(dirp)) != NULL) {
-				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/titles/%s/cheats", dp->d_name);
-				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
-				rename(cheatspathtemp, cheatspath);
-				printf(".");
-				consoleUpdate(NULL);
-				char cheatspath = "";
-				char cheatspathtemp = "";
-			}
-			else {
-				closedir(dirp);
-				remove("sdmc:/SaltySD/flags/renametocheats.flag");
-				return;
-			}
-		}
-		closedir(dirp);
-		return;
-	}
-}
-
-void renametocheatscontents() {
-	char cheatspath[64];
-	char cheatspathtemp[64];
-	DIR *dirp;
-	struct dirent *dp;
-	while(1) {
-		dirp = opendir("sdmc:/Atmosphere/contents/");
-		while (dirp) {
-			if ((dp = readdir(dirp)) != NULL) {
-				snprintf(cheatspath, sizeof cheatspath, "sdmc:/Atmosphere/contents/%s/cheats", dp->d_name);
-				snprintf(cheatspathtemp, sizeof cheatspathtemp, "%stemp", cheatspath);
-				rename(cheatspathtemp, cheatspath);
-				printf(".");
-				consoleUpdate(NULL);
-				char cheatspath = "";
-				char cheatspathtemp = "";
-			}
-			else {
-				closedir(dirp);
-				remove("sdmc:/SaltySD/flags/renametocheats.flag");
-				return;
-			}
-		}
-		closedir(dirp);
-		return;
-	}
-}
-
 int main(int argc, char **argv)
 {
-	bool Atmosphere_present = false;
     consoleInit(NULL);
 	DIR* flags_dir = opendir("sdmc:/SaltySD/flags");
 	if (!flags_dir) {
@@ -203,7 +86,6 @@ int main(int argc, char **argv)
 	else closedir(reversenx_dir);
 	FILE *titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
 	FILE *disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "r");
-	Atmosphere_present = isServiceRunning("dmnt:cht") && !(isServiceRunning("tx") && !isServiceRunning("rnx"));
 	goto start;
 
 start:
@@ -225,7 +107,6 @@ disable:
 
 bool inj;
 bool Running;
-uint8_t flag = 2;
 
 disabled:
 	inj = CheckPort();
@@ -234,11 +115,6 @@ disabled:
 	remove("sdmc:/SaltySD/FPSoffset.hex");
 	printf("SaltyNX is disabled.\n\n");
 	printf("To enable SaltyNX and loading ReverseNX, press A.\n");
-	FILE *cheats1 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
-	if (Atmosphere_present == true) {
-		if (cheats1 == NULL) printf("To disable cheats, press B.\n\n");
-		else printf("To enable cheats, press B.\n\n");
-	}
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
     while(appletMainLoop())
@@ -246,11 +122,9 @@ disabled:
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         if (kDown & KEY_X) {
-			fclose(cheats1);
 			goto close;
 		}
 		else if (kDown & KEY_A) {
-			fclose(cheats1);
 			remove("sdmc:/SaltySD/flags/disable.flag");
 			consoleClear();
 			titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "r");
@@ -262,19 +136,6 @@ disabled:
 				fclose(titleid);
 				goto global_1;
 			}
-		}
-		else if (kDown & KEY_B && Atmosphere_present == true) {
-			if (cheats1 == NULL) {
-				fclose(cheats1);
-				renametocheatstemp();
-				consoleClear();
-			}
-			else {
-				fclose(cheats1);
-				renametocheats();
-				consoleClear();
-			}
-			goto disabled;
 		}
 	}
 	goto close;
@@ -330,15 +191,7 @@ titleid_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
-	FILE *cheats2 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
-	if (Atmosphere_present == true) {
-		if (cheats2 == NULL) printf("Y - Reset settings\tZL - Disable cheats\n\n");	
-		else printf("Y - Reset settings\tZL - Enable cheats\n\n");	
-	}
-	else {
-		if (cheats2 == NULL) printf("Y - Reset settings\n\n");	
-		else printf("Y - Reset settings\n\n");	
-	}
+	printf("Y - Reset settings\n\n");	
 
     // Main loop
     while(appletMainLoop())
@@ -346,25 +199,10 @@ titleid_1:
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         if (kDown & KEY_X) {
-			fclose(cheats2);
 			break;
-		}
-		else if (kDown & KEY_ZL && Atmosphere_present == true) {
-			if (cheats2 == NULL) {
-				fclose(cheats2);
-				renametocheatstemp();
-				consoleClear();
-			}
-			else {
-				fclose(cheats2);
-				renametocheats();
-				consoleClear();
-			}
-			goto titleid_1;
 		}
 		else if (kDown & KEY_ZR) {
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
-			fclose(cheats2);
 			fclose(disable_flag);
 			goto disable;
 		}
@@ -413,7 +251,6 @@ titleid_1:
 				if (handheld_titleid == 1) remove("sdmc:/SaltySD/flags/ReverseNX/createhandheld.flag");
 				if (remove_titleid == 1) remove("sdmc:/SaltySD/flags/ReverseNX/createremove.flag");
 			}
-			fclose(cheats2);
 			fclose(titleid);
 			remove("sdmc:/SaltySD/flags/ReverseNX/titleid.flag");
 			consoleClear();
@@ -458,11 +295,6 @@ global_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
-	FILE *cheats3 = fopen("sdmc:/SaltySD/flags/renametocheats.flag", "r");
-	if (Atmosphere_present == true) {
-		if (cheats3 == NULL) printf("\t\t\t\t\t\t\tZL - Disable cheats\n\n");	
-		else printf("\t\t\t\t\t\t\tZL - Enable cheats\n\n");	
-	}
 
     // Main loop
     while(appletMainLoop())
@@ -470,24 +302,9 @@ global_1:
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         if (kDown & KEY_X) {
-			fclose(cheats3);
 			break;
 		}
-		else if (kDown & KEY_ZL && Atmosphere_present == true) {
-			if (cheats3 == NULL) {
-				fclose(cheats3);
-				renametocheatstemp();
-				consoleClear();
-			}
-			else {
-				fclose(cheats3);
-				renametocheats();
-				consoleClear();
-			}
-			goto global_1;
-		}
 		else if (kDown & KEY_ZR) {
-			fclose(cheats3);
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
 			fclose(disable_flag);
 			goto disable;
@@ -515,7 +332,6 @@ global_1:
 			}
 		}
 		else if (kDown & KEY_PLUS) {
-				fclose(cheats3);
 				fclose(titleid);
 				titleid = fopen("sdmc:/SaltySD/flags/ReverseNX/titleid.flag", "w");
 				fclose(titleid);
