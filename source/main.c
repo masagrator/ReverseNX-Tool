@@ -47,7 +47,7 @@ bool CheckIfGameRunning() {
 	else return true;
 }
 
-uint8_t* flagcode;
+uint8_t flagcode;
 
 uint8_t GetRunningFlag() {
 	char handheld_flag[128];
