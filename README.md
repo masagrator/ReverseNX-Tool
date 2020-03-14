@@ -16,8 +16,6 @@ If you want to change modes, press **+** button.
 
 If you want to disable loading ReverseNX, press **ZR**. It will go to disabled mode.
 
-If you want to disable loading cheats on game boot in Atmosphere, press **ZL** (This option is hidden for other CFWs).
-
 # global
 
 global mode is set by default. Sets **Docked** or **Handheld** performance mode for every game that you will boot (with **docked** as default).
@@ -69,24 +67,6 @@ Disabled mode locks loading plugins from SaltySD/plugins folder.
 ![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled2.jpg?raw=true)
 
 To turn off disabled mode, press **A**.
-
-To change cheats state, press **B**.
-
----
-
-# How to use cheats in Atmosphere
-
-Cheats loaded by Atmosphere when game is booting are crashing OS. To avoid it I added to ReverseNX-Tool function for renaming cheats folders in Atmosphere/titles and in Atmosphere/contents.
-
-If you want to use ReverseNX with cheats, You need to go in this order:
-
->Disable Cheats in ReverseNX-Tool
->
->Run game and wait for first sign of game loading after Nintendo logo will disappear
->
->Enable Cheats in ReverseNX-Tool
->
->Use Edizon or Checkpoint to apply cheats
 
 ---
 
