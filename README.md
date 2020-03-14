@@ -72,7 +72,7 @@ To turn off disabled mode, press **A**.
 
 # Troubleshooting
 
-If SaltyNX was not injected properly or at all, you will see... Red Screen of Death.
+If SaltyNX crashed, was not injected properly or at all, you will see... Red Screen of Death.
 ![error_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/error.jpg?raw=true)
 
-If you will see red text with first line "SaltyNX is not injected!!", check if files were copied properly. Otherwise it means CFW can't handle it.
+If you will see red text with first line "SaltyNX is not injected!!", restart Switch and check if files were copied properly. Otherwise it means CFW can't handle it.
