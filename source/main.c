@@ -5,28 +5,16 @@
 
 #include <switch.h>
 
-bool isServiceRunning(const char *serviceName) {
-  Handle handle;
-  SmServiceName service_name = smEncodeName(serviceName);
-  bool running = R_FAILED(smRegisterService(&handle, service_name, false, 1));
-
-  svcCloseHandle(handle);
-
-  if (!running) smUnregisterService(service_name);
-
-  return running;
-}
-
 bool CheckPort () {
 	Result ret;
 	Handle saltysd;
-    for (int i = 0; i < 200; i++)
-    {
-        ret = svcConnectToNamedPort(&saltysd, "InjectServ");
-        svcSleepThread(1000*1000);
-        
-        if (!ret) break;
-    }
+	for (int i = 0; i < 200; i++)
+	{
+		ret = svcConnectToNamedPort(&saltysd, "InjectServ");
+		svcSleepThread(1000*1000);
+		
+		if (!ret) break;
+	}
 	svcCloseHandle(saltysd);
 	if (ret != 0x0) return false;
 	else return true;
@@ -49,7 +37,7 @@ bool CheckIfGameRunning() {
 
 uint8_t flagcode;
 
-uint8_t GetRunningFlag() {
+void GetRunningFlag() {
 	char handheld_flag[128];
 	char docked_flag[128];
 	snprintf(handheld_flag, sizeof handheld_flag, "%s%llx%s", "sdmc:/SaltySD/plugins/0", TID, "/ReverseNX/handheld.flag");
@@ -65,7 +53,8 @@ uint8_t GetRunningFlag() {
 
 int main(int argc, char **argv)
 {
-    consoleInit(NULL);
+	AppletType at = appletGetAppletType();
+	consoleInit(NULL);
 	DIR* flags_dir = opendir("sdmc:/SaltySD/flags");
 	if (!flags_dir) {
 		closedir(flags_dir);
@@ -109,19 +98,22 @@ bool inj;
 bool Running;
 
 disabled:
-	inj = CheckPort();
-	if (inj == true) printf("SaltyNX is injected properly.\n");
-	else printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	if (at != AppletType_Application && at != AppletType_SystemApplication) {
+		inj = CheckPort();
+		if (inj == true) printf("SaltyNX is injected properly.\n");
+		else printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	}
+	else printf(CONSOLE_RED "Checking SaltyNX is not possible! Run homebrew in Applet Mode!\n");
 	remove("sdmc:/SaltySD/FPSoffset.hex");
 	printf("SaltyNX is disabled.\n\n");
 	printf("To enable SaltyNX and loading ReverseNX, press A.\n");
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
-    while(appletMainLoop())
-    {	
+	while(appletMainLoop())
+	{	
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) {
+		if (kDown & KEY_X) {
 			goto close;
 		}
 		else if (kDown & KEY_A) {
@@ -141,8 +133,11 @@ disabled:
 	goto close;
 			
 titleid_1:
-	inj = CheckPort();
-	if (inj != true) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	if (at != AppletType_Application && at != AppletType_SystemApplication) {
+		inj = CheckPort();
+		if (inj == false) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	}
+	else printf(CONSOLE_RED "Checking SaltyNX is not possible! Run homebrew in Applet Mode!\n");
 	Running = CheckIfGameRunning();
 	if (Running == true) {
 		GetRunningFlag();
@@ -159,7 +154,7 @@ titleid_1:
 	u8 docked_titleid = 0;
 	u8 remove_titleid = 0;
 
-    if (docked_flag_titleid && handheld_flag_titleid) {
+	if (docked_flag_titleid && handheld_flag_titleid) {
 		printf("Detected both flags.\n");
 		fclose(handheld_flag_titleid);
 		fclose(docked_flag_titleid);
@@ -193,12 +188,12 @@ titleid_1:
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
 	printf("Y - Reset settings\n\n");	
 
-    // Main loop
-    while(appletMainLoop())
-    {
+	// Main loop
+	while(appletMainLoop())
+	{
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) {
+		if (kDown & KEY_X) {
 			break;
 		}
 		else if (kDown & KEY_ZR) {
@@ -257,20 +252,23 @@ titleid_1:
 			goto global_1;
 			}
 
-        consoleUpdate(NULL);
+		consoleUpdate(NULL);
 		}
 	goto close;
 
 global_1:
-	inj = CheckPort();
-	if (inj != true) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	if (at != AppletType_Application && at != AppletType_SystemApplication) {
+		inj = CheckPort();
+		if (inj == false) printf(CONSOLE_RED "SaltyNX is not injected!!\n");
+	}
+	else printf(CONSOLE_RED "Checking SaltyNX is not possible! Run homebrew in Applet Mode!\n");
 	printf("Global mode set. Press + to change mode to titleid.\n\n");
 	FILE *handheld_flag_global = fopen("sdmc:/SaltySD/plugins/ReverseNX/handheld.flag", "r");
 	FILE *docked_flag_global = fopen("sdmc:/SaltySD/plugins/ReverseNX/docked.flag", "r");
 	u8 handheld = 0;
 	u8 docked = 0;
 
-    if (docked_flag_global && handheld_flag_global) {
+	if (docked_flag_global && handheld_flag_global) {
 		printf("Detected both flags.\n");
 		fclose(handheld_flag_global);
 		fclose(docked_flag_global);
@@ -296,12 +294,12 @@ global_1:
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
 
-    // Main loop
-    while(appletMainLoop())
-    {
+	// Main loop
+	while(appletMainLoop())
+	{
 		hidScanInput();
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_X) {
+		if (kDown & KEY_X) {
 			break;
 		}
 		else if (kDown & KEY_ZR) {
@@ -339,12 +337,12 @@ global_1:
 				goto titleid_1;
 			}
 
-        consoleUpdate(NULL);
+		consoleUpdate(NULL);
 		
-    }
+	}
 	goto close;
 
 close:
-    consoleExit(NULL);
-    return 0;
+	consoleExit(NULL);
+	return 0;
 }
