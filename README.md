@@ -72,7 +72,12 @@ To turn off disabled mode, press **A**.
 
 # Troubleshooting
 
-If SaltyNX crashed, was not injected properly or at all, you will see... Red Screen of Death.
+
+If SaltyNX was not injected, it crashed or ReverseNX-Tool can't check if it's running, you will see... Red Screen of Death.
 ![error_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/error.jpg?raw=true)
 
-If you will see red text with first line "SaltyNX is not injected!!", restart Switch and check if files were copied properly. Otherwise it means CFW can't handle it.
+If you will see red text with first line:
+- "SaltyNX is not injected!!" - check if files were copied properly and try to restart Switch. 
+- "Checking SaltyNX is not possible! Run homebrew in Applet mode!" - run homebrew from Album hbmenu
+
+Otherwise it means CFW can't handle it.
