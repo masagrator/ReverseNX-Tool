@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **1.36**, SaltyNX **0.1.2a**, ReverseNX **0.34**
+This doc has been made for releases: ReverseNX-Tool **1.3.8**, SaltyNX **0.2.0a**, ReverseNX **0.34**
 
 ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
 
@@ -15,6 +15,8 @@ For `global` and `titleid` modes:
 If you want to change modes, press **+** button. 
 
 If you want to disable loading ReverseNX, press **ZR**. It will go to disabled mode.
+
+If you want to disable\enable log writing, press **ZL**.
 
 # global
 
