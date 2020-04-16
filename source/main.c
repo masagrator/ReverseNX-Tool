@@ -53,23 +53,26 @@ void GetRunningFlag() {
 
 int main(int argc, char **argv)
 {
+	bool log = false;
 	AppletType at = appletGetAppletType();
 	consoleInit(NULL);
 	DIR* flags_dir = opendir("sdmc:/SaltySD/flags");
 	if (!flags_dir) {
-		closedir(flags_dir);
 		mkdir("sdmc:/SaltySD/flags", ACCESSPERMS);
 	}
 	else closedir(flags_dir);
+	FILE* logflag = fopen("sdmc:/SaltySD/flags/log.flag", "r");
+	if (logflag) {
+		log = true;
+		fclose(logflag);
+	}
 	DIR* flags_reversenx_dir = opendir("sdmc:/SaltySD/flags/ReverseNX");
 	if (!flags_reversenx_dir) {
-		closedir(flags_reversenx_dir);
 		mkdir("sdmc:/SaltySD/flags/ReverseNX", ACCESSPERMS);
 	}
 	else closedir(flags_reversenx_dir);
 	DIR* reversenx_dir = opendir("sdmc:/SaltySD/plugins/ReverseNX");
 	if (!reversenx_dir) {
-		closedir(reversenx_dir);
 		mkdir("sdmc:/SaltySD/plugins/ReverseNX", ACCESSPERMS);
 	}
 	else closedir(reversenx_dir);
@@ -107,6 +110,8 @@ disabled:
 	remove("sdmc:/SaltySD/FPSoffset.hex");
 	printf("SaltyNX is disabled.\n\n");
 	printf("To enable SaltyNX and loading ReverseNX, press A.\n");
+	if (log == true) printf("Press ZL to disable log writing.\n");
+	else printf("Press ZL to enable log writing.\n");
 	printf("Press X to exit.\n");
 	consoleUpdate(NULL);
 	while(appletMainLoop())
@@ -115,6 +120,19 @@ disabled:
 		u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
 		if (kDown & KEY_X) {
 			goto close;
+		}
+		else if (kDown & KEY_ZL) {
+			if (log == true) {
+				remove("sdmc:/SaltySD/flags/log.flag");
+				log = false;
+				goto disable;
+			}
+			else {
+				logflag = fopen("sdmc:/SaltySD/flags/log.flag", "w");
+				fclose(logflag);
+				log = true;
+				goto disable;
+			}
 		}
 		else if (kDown & KEY_A) {
 			remove("sdmc:/SaltySD/flags/disable.flag");
@@ -186,7 +204,8 @@ titleid_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
-	printf("Y - Reset settings\n\n");	
+	if (log == true) printf("Y - Reset settings\tZL - Disable log writing\n\n");
+	else printf("Y - Reset settings\tZL - Enable log writing\n\n");	
 
 	// Main loop
 	while(appletMainLoop())
@@ -200,6 +219,21 @@ titleid_1:
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
 			fclose(disable_flag);
 			goto disable;
+		}
+		else if (kDown & KEY_ZL) {
+			if (log == true) {
+				remove("sdmc:/SaltySD/flags/log.flag");
+				log = false;
+				consoleClear();
+				goto titleid_1;
+			}
+			else {
+				logflag = fopen("sdmc:/SaltySD/flags/log.flag", "w");
+				fclose(logflag);
+				log = true;
+				consoleClear();
+				goto titleid_1;
+			}
 		}
 		else if (kDown & KEY_A) {
 			if (docked_titleid == 1) printf("You have already docked flag!\n");
@@ -293,6 +327,8 @@ global_1:
 	printf("Profiles:\t\t\t\tOptions:\n");	
 	printf("A - Docked\t\t\t\tX - Exit\n");
 	printf("B - Handheld\t\t\tZR - Disable SaltyNX\n");
+	if (log == true) printf("\t\t\t\t\t\t\tZL - Disable log writing\n\n");
+	else printf("\t\t\t\t\t\t\tZL - Enable log writing\n\n");
 
 	// Main loop
 	while(appletMainLoop())
@@ -306,6 +342,21 @@ global_1:
 			FILE* disable_flag = fopen("sdmc:/SaltySD/flags/disable.flag", "w");
 			fclose(disable_flag);
 			goto disable;
+		}
+		else if (kDown & KEY_ZL) {
+			if (log == true) {
+				remove("sdmc:/SaltySD/flags/log.flag");
+				log = false;
+				consoleClear();
+				goto global_1;
+			}
+			else {
+				logflag = fopen("sdmc:/SaltySD/flags/log.flag", "w");
+				fclose(logflag);
+				log = true;
+				consoleClear();
+				goto global_1;
+			}
 		}
 		else if (kDown & KEY_A) {
 			if (docked == 1) printf("You have already docked flag!\n");
