@@ -37,15 +37,16 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
+TARGET		:=	ReverseNX-Tool
 BUILD		:=	build
-SOURCES		:=	source
+SOURCES		:=	source source/States
 DATA		:=	data
 INCLUDES	:=	include
-APP_AUTHOR	:=	"MasaGratoR"
-APP_VERSION	:=	"1.3.8"
-#ROMFS	:=	romfs
 
+APP_TITLE	:=	ReverseNX-Tool
+APP_AUTHOR	:=	MasaGratoR
+APP_VERSION	:=	2.0.0
+#ROMFS		:=	romfs
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
