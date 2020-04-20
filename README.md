@@ -28,5 +28,5 @@ Author: Sun-Research-University
 
 https://github.com/Sun-Research-University/sys-clk-Editor
 
-Support author on Ko-Fi
+Support sys-clk-editor author on Ko-Fi
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
