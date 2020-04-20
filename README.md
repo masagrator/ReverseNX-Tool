@@ -1,85 +1,25 @@
-This doc has been made for releases: ReverseNX-Tool **1.3.8**, SaltyNX **0.2.0a**, ReverseNX **0.34**
+This doc has been made for releases: ReverseNX-Tool **2.0.0**, SaltyNX **0.3.0a**
 
-ReverseNX-Tool is an additional tool to make managament of ReverseNX flags easier.
-
-To use only in Applet mode. Title replacement mode in 99.9% of cases will block function responsible for checking if SaltyNX is alive and can even crash SaltyNX.
-
-https://github.com/masagrator/ReverseNX
+ReverseNX-Tool is a tool that takes advantage of SaltyNX patches function and manages creating ReverseNX patches.
 
 -------------
 
-Tool has three operation modes: `global`, `titleid` and `disabled`.
+![Screen image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen.jpg?raw=true)
 
-For `global` and `titleid` modes:
+Handheld - It forces to work in handheld mode
+Docked - It forces to work in docked mode
+Default - default behaviour for games, specified in `Default` line
+System - Patching functions is disabled. Available only in `Default` line
+Broken data - something is wrong with files (user was messing with files manually or sdcard is corrupted)
 
-If you want to change modes, press **+** button. 
-
-If you want to disable loading ReverseNX, press **ZR**. It will go to disabled mode.
-
-If you want to disable\enable log writing, press **ZL**.
-
-# global
-
-global mode is set by default. Sets **Docked** or **Handheld** performance mode for every game that you will boot (with **docked** as default).
-
-![global image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/global.jpg?raw=true)
-
->"Detected docked global flag" means that plugin is forcing docked performance mode.
->
->"Detected handheld global flag" means that plugin is forcing handheld performance mode.
-
-If you want to force one of performance modes, you need to press
-
-**A** for Docked mode
-
-**B** for Handheld mode
+To change mode, just press A on selected title.
+To exit, you can either press `B` or `+`.
 
 -------------
 
-# titleid
-
-titleid mode sets docked or handheld performance mode for each game separately.
-
-![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/titleid2.jpg?raw=true)
-
-**It's not a manager of flags for games!** It only informs ReverseNX to create needed files in correct folders for first game you will boot and it will stay in that way. After booting first game you need to set again new performance mode if you want to change already set performance modes or create a new one. **So changing performance mode works only for first game you will boot after setting performance mode in titleid operation mode of ReverseNX-Tool!**
-
->"No change flag detected. ReverseNX-Tool disabled" means that ReverseNX will not change performance mode for next game you will boot.
->
->"Detected docked titleid flag" means that ReverseNX will change performance mode to **docked** for next game you will boot.
->
->"Detected handheld titleid flag" means that ReverseNX will change performance mode to **handheld** for next game you will boot.
-
-If you want to change it, press
-
-**A** for Docked mode
-
-**B** for Handheld mode
-
-If you want to bring default settings for game, press **Y**.
-
-When game is running, it will show at first line what flag is set in folder for this game.
-
----
-
-# disabled
-
-Disabled mode locks loading plugins from SaltySD/plugins folder. 
-
-![titleid_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/disabled2.jpg?raw=true)
-
-To turn off disabled mode, press **A**.
-
----
-
-# Troubleshooting
-
-
-If SaltyNX was not injected, it crashed or ReverseNX-Tool can't check if it's running, you will see... Red Screen of Death.
-![error_image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/error.jpg?raw=true)
-
-If you will see red text with first line:
-- "SaltyNX is not injected!!" - check if files were copied properly and try to restart Switch. 
-- "Checking SaltyNX is not possible! Run homebrew in Applet mode!" - run homebrew from Album hbmenu
-
-Otherwise it means CFW can't handle it.
+#Thanks to
+ReverseNX-Tool from 2.0.0 is based on sys-clk-Editor code.
+Author: Sun-Research-University
+https://github.com/Sun-Research-University/sys-clk-Editor
+Support author on Ko-Fi
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
