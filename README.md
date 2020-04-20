@@ -18,6 +18,7 @@ To exit, you can either press `B` or `+`.
 -------------
 
 #Thanks to
+
 ReverseNX-Tool from 2.0.0 is based on sys-clk-Editor code.
 Author: Sun-Research-University
 https://github.com/Sun-Research-University/sys-clk-Editor
