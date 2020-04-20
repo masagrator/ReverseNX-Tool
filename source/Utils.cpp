@@ -1,8 +1,6 @@
 #include "Utils.h"
 #include <sstream>
-#include <algorithm>
 #include <cstring>
-#include <filesystem>
 #include "States/ErrorMenu.h"
 #include <sys/stat.h>
 #include <inttypes.h>

@@ -1,9 +1,6 @@
 #include <switch.h>
 #include "Utils.h"
 #include "menu.h"
-#include <stdio.h>
-#include <filesystem>
-#include <sys/stat.h>
 
 #include "States/StateMachine.h"
 #include "States/States.h"
@@ -50,22 +47,13 @@ extern "C"
     void userAppInit(void)
     {
         Result rc;
-        rc = pmshellInitialize();
-        if (R_FAILED(rc))
-            goto error;
-        rc = pmdmntInitialize();
-        if (R_FAILED(rc))
-            goto error;
         rc = nsInitialize();
 
-    error:
         ErrorMenu::error = rc;
     }
 
     void userAppExit(void)
     {
         nsExit();
-        pmdmntExit();
-        pmshellExit();
     }
 }
