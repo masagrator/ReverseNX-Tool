@@ -10,7 +10,7 @@ ReverseNX-Tool is a tool that takes advantage of SaltyNX patches function and ma
 Handheld - It forces to work in handheld mode
 Docked - It forces to work in docked mode
 Default - default behaviour for games, specified in `Default` line
-System - Patching functions is disabled. Available only in `Default` line
+System - ReverseNX is disabled. Available only in `Default` line
 Broken data - something is wrong with files (user was messing with files manually or sdcard is corrupted)
 ```
 
