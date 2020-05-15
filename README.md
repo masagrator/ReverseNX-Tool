@@ -2,6 +2,8 @@ This doc has been made for releases: ReverseNX-Tool **2.0.0**, SaltyNX **0.3.0a*
 
 ReverseNX-Tool is a tool that takes advantage of SaltyNX patches function and manages creating ReverseNX patches.
 
+Installed SaltyNX is obligatory.
+
 -------------
 
 ![Screen image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen.jpg?raw=true)
