@@ -11,8 +11,8 @@ Installed SaltyNX is obligatory.
 ```
 Handheld - It forces to work in handheld mode
 Docked - It forces to work in docked mode
-Default - default behaviour for games, specified in `Default` line
-System - ReverseNX is disabled. Available only in `Default` line
+Default - default behaviour for games, specified in `Default: ` line
+System - ReverseNX is disabled. Available only in `Default: ` line
 Broken data - something is wrong with files (user was messing with files manually or sdcard is corrupted)
 ```
 
