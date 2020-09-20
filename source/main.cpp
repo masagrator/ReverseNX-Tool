@@ -12,13 +12,12 @@ enum Flag {
 	Flag_Handheld = 0,
 	Flag_Docked = 1,
 	Flag_System = 2,
-	Flag_Broken = 3
 };
 
 struct Title
 {
-    u64 TitleID;
-    std::string TitleName;
+	u64 TitleID;
+	std::string TitleName;
 	Flag ReverseNX;
 };
 
@@ -34,6 +33,20 @@ char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
 NsApplicationControlData* _NsApplicationControlData = nullptr;
 brls::Image* icon = nullptr;
+
+void RemoveReverseNX(u64 tid) {
+	if (tid == UINT64_MAX) {
+		for (uint8_t i = 0; i < 2; i++) {
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
+			remove(ReverseNX);
+		}
+	}
+	else for (uint8_t i = 0; i < 2; i++) {
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
+		remove(ReverseNX);
+	}
+	brls::Application::notify("Found and deleted broken patches.");
+}
 
 void setReverseNX(uint64_t tid, Flag changedFlag) {
 	
@@ -106,7 +119,8 @@ Flag getReverseNX(uint64_t tid) {
 				}
 				if (c != 16) {
 					fclose(asem);
-					return Flag_Broken;
+					RemoveReverseNX(tid);
+					return Flag_System;
 				}
 				else dockedflag = true;
 			}
@@ -134,7 +148,10 @@ Flag getReverseNX(uint64_t tid) {
 					}
 					fclose(asem);
 					if (c == 16 && dockedflag == true) return Flag_Docked;
-					else return Flag_Broken;
+					else {
+						RemoveReverseNX(tid);
+						return Flag_System;
+					}
 				}
 			}
 		}
@@ -143,7 +160,8 @@ Flag getReverseNX(uint64_t tid) {
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fclose(asem);
-				return Flag_Broken;
+				RemoveReverseNX(tid);
+				return Flag_System;
 			}
 			else return Flag_System;
 		}
@@ -166,7 +184,8 @@ Flag getReverseNX(uint64_t tid) {
 				}
 				if (c != 16) {
 					fclose(asem);
-					return Flag_Broken;
+					RemoveReverseNX(tid);
+					return Flag_System;
 				}
 				else dockedflag = true;
 			}
@@ -194,7 +213,10 @@ Flag getReverseNX(uint64_t tid) {
 					}
 					fclose(asem);
 					if (c == 16 && dockedflag == true) return Flag_Docked;
-					else return Flag_Broken;
+					else {
+						RemoveReverseNX(tid);
+						return Flag_System;
+					}
 				}
 			}
 		}
@@ -203,64 +225,64 @@ Flag getReverseNX(uint64_t tid) {
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fclose(asem);
-				return Flag_Broken;
+				RemoveReverseNX(tid);
 			}
-			else return Flag_System;
+			return Flag_System;
 		}
 	}
 		
-	return Flag_Broken;
+	return Flag_System;
 }
 
 string getAppName(uint64_t Tid)
 {
-    NsApplicationControlData appControlData;
-    size_t appControlDataSize = 0;
-    NacpLanguageEntry *languageEntry = nullptr;
-    Result rc;
+	NsApplicationControlData appControlData;
+	size_t appControlDataSize = 0;
+	NacpLanguageEntry *languageEntry = nullptr;
+	Result rc;
 
-    memset(&appControlData, 0x00, sizeof(NsApplicationControlData));
+	memset(&appControlData, 0x00, sizeof(NsApplicationControlData));
 
-    rc = nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize);
-    if (R_FAILED(rc))
-    {
-        stringstream ss;
-        ss << 0 << hex << uppercase << Tid;
-        return ss.str();
-    }
-    rc = nacpGetLanguageEntry(&appControlData.nacp, &languageEntry);
-    if (R_FAILED(rc))
-    {
-        stringstream ss;
-        ss << 0 << hex << uppercase << Tid;
-        return ss.str();
-    }
-    return string(languageEntry->name);
+	rc = nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize);
+	if (R_FAILED(rc))
+	{
+		stringstream ss;
+		ss << 0 << hex << uppercase << Tid;
+		return ss.str();
+	}
+	rc = nacpGetLanguageEntry(&appControlData.nacp, &languageEntry);
+	if (R_FAILED(rc))
+	{
+		stringstream ss;
+		ss << 0 << hex << uppercase << Tid;
+		return ss.str();
+	}
+	return string(languageEntry->name);
 }
 
 vector<Title> getAllTitles()
 {
-    vector<Title> apps;
-    NsApplicationRecord *appRecords = new NsApplicationRecord[1024]; // Nobody's going to have more than 1024 games hopefully...
-    s32 actualAppRecordCnt = 0;
-    Result rc;
-    rc = nsListApplicationRecord(appRecords, 1024, 0, &actualAppRecordCnt);
-    if (R_FAILED(rc))
-    {
+	vector<Title> apps;
+	NsApplicationRecord *appRecords = new NsApplicationRecord[1024]; // Nobody's going to have more than 1024 games hopefully...
+	s32 actualAppRecordCnt = 0;
+	Result rc;
+	rc = nsListApplicationRecord(appRecords, 1024, 0, &actualAppRecordCnt);
+	if (R_FAILED(rc))
+	{
 		while (brls::Application::mainLoop());
 		exit(rc);
-    }
+	}
 
-    for (s32 i = 0; i < actualAppRecordCnt; i++)
-    {
-        Title title;
-        title.TitleID = appRecords[i].application_id;
-        title.TitleName = getAppName(appRecords[i].application_id);
+	for (s32 i = 0; i < actualAppRecordCnt; i++)
+	{
+		Title title;
+		title.TitleID = appRecords[i].application_id;
+		title.TitleName = getAppName(appRecords[i].application_id);
 		title.ReverseNX = getReverseNX(appRecords[i].application_id);
-        apps.push_back(title);
-    }
-    delete[] appRecords;
-    return apps;
+		apps.push_back(title);
+	}
+	delete[] appRecords;
+	return apps;
 }
 
 int main(int argc, char *argv[])
@@ -304,27 +326,6 @@ int main(int argc, char *argv[])
 		for (uint32_t i = 0; i < count; i++) {
 			
 			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			switch (titles.at(i).ReverseNX) {
-				case Flag_Handheld:
-					StatusItem->setValue("Handheld");
-					break;
-					
-				case Flag_Docked:
-					StatusItem->setValue("Docked");
-					break;
-					
-				case Flag_System:
-					StatusItem->setValue("System");
-					break;
-					
-				case Flag_Broken:
-					StatusItem->setValue("Broken");
-					break;
-					
-				default:
-					StatusItem->setValue("Error");
-					break;
-			}
 			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
 				Flag changeFlag = (Flag)selection;

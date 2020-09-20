@@ -12,11 +12,12 @@ Installed SaltyNX is obligatory.
 
 # Thanks to
 
-ReverseNX-Tool from 2.0.0 is based on sys-clk-Editor code.
-
-Author: Sun-Research-University
+Sun-Research-University
 
 https://github.com/Sun-Research-University/sys-clk-Editor
 
 Support sys-clk-editor author on Ko-Fi
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
+
+All Borealis contributors
+https://github.com/natinusala/borealis
