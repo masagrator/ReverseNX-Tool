@@ -9,10 +9,10 @@
 using namespace std;
 
 enum Flag {
-	Flag_Broken = 0,
-	Flag_Handheld = 1,
-	Flag_Docked = 2,
-	Flag_System = 3
+	Flag_Handheld = 0,
+	Flag_Docked = 1,
+	Flag_System = 2,
+	Flag_Broken = 3
 };
 
 struct Title
@@ -32,6 +32,8 @@ bool handheldflag = false;
 char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64" };
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
+NsApplicationControlData* _NsApplicationControlData = nullptr;
+brls::Image* icon = nullptr;
 
 void setReverseNX(uint64_t tid, Flag changedFlag) {
 	
@@ -216,7 +218,7 @@ int main(int argc, char *argv[])
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
-			brls::ListItem* StatusItem = new brls::ListItem(titles.at(i).TitleName.c_str());
+			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
 			switch (titles.at(i).ReverseNX) {
 				case Flag_Handheld:
 					StatusItem->setValue("Handheld");
@@ -231,15 +233,16 @@ int main(int argc, char *argv[])
 					break;
 					
 				case Flag_Broken:
-					StatusItem->setValue("Handheld");
+					StatusItem->setValue("Broken");
 					break;
 					
 				default:
 					StatusItem->setValue("Error");
 					break;
 			}
-			StatusItem->getClickEvent()->subscribe([i](brls::View* view) {
-				Flag changeFlag = Flag_Docked;
+			
+			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
+				Flag changeFlag = (Flag)selection;
 				setReverseNX(titles.at(i).TitleID, changeFlag);
 			});
 			
