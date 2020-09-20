@@ -32,8 +32,6 @@ bool handheldflag = false;
 char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64" };
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
-NsApplicationControlData* _NsApplicationControlData = nullptr;
-brls::Image* icon = nullptr;
 
 void setReverseNX(uint64_t tid, Flag changedFlag) {
 	
