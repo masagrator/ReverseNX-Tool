@@ -210,6 +210,9 @@ int main(int argc, char *argv[])
 		
 		brls::List* OptionsList = new brls::List();
 		
+		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
+		OptionsList->addView(Warning);
+		
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
