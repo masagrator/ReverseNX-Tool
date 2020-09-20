@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include <borealis.hpp>
+#include "About_tab.hpp"
 
 using namespace std;
 
@@ -208,7 +209,6 @@ int main(int argc, char *argv[])
 		rootFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
 		
 		brls::List* OptionsList = new brls::List();
-		brls::List* AboutList = new brls::List();
 		
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
@@ -245,16 +245,7 @@ int main(int argc, char *argv[])
 		
 		rootFrame->addTab("Games", OptionsList);
 		
-		brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "ReverseNX-Tool 3.0.0", false);
-		AboutList->addView(Label1);
-
-		brls::Label* Label2 = new brls::Label(brls::LabelStyle::MEDIUM, "Research & Development of SaltyNX: Shiny Quagsire\nDevelopment of SaltyNX and SaltyNX-Tool: MasaGratoR", true);
-		AboutList->addView(Label2);
-		
-		brls::Label* Label3 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Copyright (C) 2020 MasaGratoR\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see https://www.gnu.org/licenses/", true);
-		AboutList->addView(Label3);
-		
-		rootFrame->addTab("About", AboutList);
+		rootFrame->addTab("About", new AboutTab());
 
 	}
 
