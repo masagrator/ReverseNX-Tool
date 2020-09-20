@@ -12,12 +12,12 @@ Installed SaltyNX is obligatory.
 
 # Thanks to
 
-Sun-Research-University
-
-https://github.com/Sun-Research-University/sys-clk-Editor
-
-Support sys-clk-editor author on Ko-Fi
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
-
 All Borealis contributors
 https://github.com/natinusala/borealis
+
+Sun-Research-University
+
+https://github.com/Sun-Research-University
+
+Support them on Ko-Fi
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
