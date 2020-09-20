@@ -38,92 +38,177 @@ brls::Image* icon = nullptr;
 void setReverseNX(uint64_t tid, Flag changedFlag) {
 	
 	for (uint8_t i = 0; i < 2; i++) {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64, tid);
-		DIR* patchdir = opendir(ReverseNX);
-		if (patchdir == NULL) mkdir(ReverseNX, 777);
-		else closedir(patchdir);
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
-		FILE* asem = fopen(ReverseNX, "wb");
-		switch(changedFlag) {
-			case Flag_Handheld:
-				fwrite(Handheld, 1, 16, asem);
-				fclose(asem);
-				break;
-			
-			case Flag_Docked:
-				fwrite(Docked, 1, 16, asem);
-				fclose(asem);
-				break;
-			
-			default:
-				fclose(asem);
-				remove(ReverseNX);
-				break;
+		if (tid == UINT64_MAX) {
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
+			FILE* asem = fopen(ReverseNX, "wb");
+			switch(changedFlag) {
+				case Flag_Handheld:
+					fwrite(Handheld, 1, 16, asem);
+					fclose(asem);
+					break;
 				
+				case Flag_Docked:
+					fwrite(Docked, 1, 16, asem);
+					fclose(asem);
+					break;
+				
+				default:
+					fclose(asem);
+					remove(ReverseNX);
+					break;
+					
+			}
+		}
+		else {
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64, tid);
+			DIR* patchdir = opendir(ReverseNX);
+			if (patchdir == NULL) mkdir(ReverseNX, 777);
+			else closedir(patchdir);
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
+			FILE* asem = fopen(ReverseNX, "wb");
+			switch(changedFlag) {
+				case Flag_Handheld:
+					fwrite(Handheld, 1, 16, asem);
+					fclose(asem);
+					break;
+				
+				case Flag_Docked:
+					fwrite(Docked, 1, 16, asem);
+					fclose(asem);
+					break;
+				
+				default:
+					fclose(asem);
+					remove(ReverseNX);
+					break;
+					
+			}
 		}
 	}
 }
 
 Flag getReverseNX(uint64_t tid) {
-	snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[0]);
-	FILE* asem = fopen(ReverseNX, "r");
-	if (asem != NULL) {
-		fread(&filebuffer, 1, 16, asem);
-		int c = 0;
-		while (c < 16) {
-			if (filebuffer[c] == Handheld[c]) c++;
-			else break;
-		}
-		if (c != 16) {
-			c = 0;
-			while (c < 16) {
-				if (filebuffer[c] == Docked[c]) c++;
-				else break;
-			}
-			if (c != 16) {
-				fclose(asem);
-				return Flag_Broken;
-			}
-			else dockedflag = true;
-		}
-		else handheldflag = true;
-		fclose(asem);
-			
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
-		asem = fopen(ReverseNX, "r");
+	if (tid == UINT64_MAX) {
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[0]);
+		FILE* asem = fopen(ReverseNX, "r");
 		if (asem != NULL) {
 			fread(&filebuffer, 1, 16, asem);
-			c = 0;
+			int c = 0;
 			while (c < 16) {
 				if (filebuffer[c] == Handheld[c]) c++;
 				else break;
 			}
-			if (c == 16 && handheldflag == true) {
-				fclose(asem);
-				return Flag_Handheld;
-			}
-			else {
+			if (c != 16) {
 				c = 0;
 				while (c < 16) {
 					if (filebuffer[c] == Docked[c]) c++;
 					else break;
 				}
-				fclose(asem);
-				if (c == 16 && dockedflag == true) return Flag_Docked;
-				else return Flag_Broken;
+				if (c != 16) {
+					fclose(asem);
+					return Flag_Broken;
+				}
+				else dockedflag = true;
 			}
+			else handheldflag = true;
+			fclose(asem);
+				
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[1]);
+			asem = fopen(ReverseNX, "r");
+			if (asem != NULL) {
+				fread(&filebuffer, 1, 16, asem);
+				c = 0;
+				while (c < 16) {
+					if (filebuffer[c] == Handheld[c]) c++;
+					else break;
+				}
+				if (c == 16 && handheldflag == true) {
+					fclose(asem);
+					return Flag_Handheld;
+				}
+				else {
+					c = 0;
+					while (c < 16) {
+						if (filebuffer[c] == Docked[c]) c++;
+						else break;
+					}
+					fclose(asem);
+					if (c == 16 && dockedflag == true) return Flag_Docked;
+					else return Flag_Broken;
+				}
+			}
+		}
+		else {
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			asem = fopen(ReverseNX, "r");
+			if (asem != NULL) {
+				fclose(asem);
+				return Flag_Broken;
+			}
+			else return Flag_System;
 		}
 	}
 	else {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
-		asem = fopen(ReverseNX, "r");
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[0]);
+		FILE* asem = fopen(ReverseNX, "r");
 		if (asem != NULL) {
+			fread(&filebuffer, 1, 16, asem);
+			int c = 0;
+			while (c < 16) {
+				if (filebuffer[c] == Handheld[c]) c++;
+				else break;
+			}
+			if (c != 16) {
+				c = 0;
+				while (c < 16) {
+					if (filebuffer[c] == Docked[c]) c++;
+					else break;
+				}
+				if (c != 16) {
+					fclose(asem);
+					return Flag_Broken;
+				}
+				else dockedflag = true;
+			}
+			else handheldflag = true;
 			fclose(asem);
-			return Flag_Broken;
+				
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			asem = fopen(ReverseNX, "r");
+			if (asem != NULL) {
+				fread(&filebuffer, 1, 16, asem);
+				c = 0;
+				while (c < 16) {
+					if (filebuffer[c] == Handheld[c]) c++;
+					else break;
+				}
+				if (c == 16 && handheldflag == true) {
+					fclose(asem);
+					return Flag_Handheld;
+				}
+				else {
+					c = 0;
+					while (c < 16) {
+						if (filebuffer[c] == Docked[c]) c++;
+						else break;
+					}
+					fclose(asem);
+					if (c == 16 && dockedflag == true) return Flag_Docked;
+					else return Flag_Broken;
+				}
+			}
 		}
-		else return Flag_System;
+		else {
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			asem = fopen(ReverseNX, "r");
+			if (asem != NULL) {
+				fclose(asem);
+				return Flag_Broken;
+			}
+			else return Flag_System;
+		}
 	}
-	
+		
 	return Flag_Broken;
 }
 
@@ -250,6 +335,18 @@ int main(int argc, char *argv[])
 		}
 		
 		rootFrame->addTab("Games", OptionsList);
+		
+		brls::List* SettingsList = new brls::List();
+		
+		brls::SelectListItem* SettingItem = new brls::SelectListItem("Enforce mode globally", { "Handheld", "Docked", "Disabled" }, (unsigned)getReverseNX(UINT64_MAX), "Option to force all games set to System in Games tab to run in one mode");
+		SettingItem->getValueSelectedEvent()->subscribe([](size_t selection) {
+				Flag changeFlag = (Flag)selection;
+				setReverseNX(UINT64_MAX, changeFlag);
+		});
+		
+		SettingsList->addView(SettingItem);
+		
+		rootFrame->addTab("Settings", SettingsList);
 		
 		rootFrame->addTab("About", new AboutTab());
 
