@@ -17,7 +17,7 @@ https://github.com/natinusala/borealis
 
 Sun-Research-University
 
-https://github.com/Sun-Research-University/sys-clk-Editor
+https://github.com/Sun-Research-University
 
-Support sys-clk-editor author on Ko-Fi
+Support them on Ko-Fi
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0LUTH)<br>
