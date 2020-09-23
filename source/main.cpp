@@ -35,7 +35,6 @@ char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOp
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
 NsApplicationControlData appControlData;
-bool FullOptionsPushed = false;
 
 void RemoveReverseNX(u64 tid) {
 	if (tid == UINT64_MAX) {
