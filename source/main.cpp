@@ -14,11 +14,14 @@ enum Flag {
 	Flag_System = 2,
 };
 
+typedef uint8_t NsApplicationIcon[0x20000];
+
 struct Title
 {
 	u64 TitleID;
 	std::string TitleName;
 	Flag ReverseNX;
+	NsApplicationIcon icon;
 };
 
 Result nsError = 0x1;
@@ -31,6 +34,8 @@ bool handheldflag = false;
 char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64" };
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
+NsApplicationControlData appControlData;
+bool FullOptionsPushed = false;
 
 void RemoveReverseNX(u64 tid) {
 	if (tid == UINT64_MAX) {
@@ -234,12 +239,11 @@ Flag getReverseNX(uint64_t tid) {
 
 string getAppName(uint64_t Tid)
 {
-	NsApplicationControlData appControlData;
 	size_t appControlDataSize = 0;
 	NacpLanguageEntry *languageEntry = nullptr;
 	Result rc;
 
-	memset(&appControlData, 0x00, sizeof(NsApplicationControlData));
+	memset(&appControlData, 0x0, sizeof(NsApplicationControlData));
 
 	rc = nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize);
 	if (R_FAILED(rc))
@@ -277,6 +281,7 @@ vector<Title> getAllTitles()
 		title.TitleID = appRecords[i].application_id;
 		title.TitleName = getAppName(appRecords[i].application_id);
 		title.ReverseNX = getReverseNX(appRecords[i].application_id);
+		memcpy(&title.icon, appControlData.icon, sizeof(title.icon));
 		apps.push_back(title);
 	}
 	delete[] appRecords;
@@ -319,15 +324,48 @@ int main(int argc, char *argv[])
 		
 		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
 		OptionsList->addView(Warning);
+
 		
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
 			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
 			
+			StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
+			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
 				Flag changeFlag = (Flag)selection;
 				setReverseNX(titles.at(i).TitleID, changeFlag);
+			});
+			
+			StatusItem->registerAction("Hide tab", brls::Key::L, [titles, count] {
+				brls::AppletFrame* FullOptionsFrame = new brls::AppletFrame(true, true);	
+				FullOptionsFrame->setTitle("ReverseNX-Tool");
+				FullOptionsFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
+				brls::List* FullOptionsList = new brls::List();
+				brls::Label* Warning2 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
+				FullOptionsList->addView(Warning2);
+				for (uint32_t i = 0; i < count; i++) {
+					brls::SelectListItem* StatusItem2 = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
+				
+					StatusItem2->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
+					
+					StatusItem2->getValueSelectedEvent()->subscribe([i](size_t selection) {
+						Flag changeFlag = (Flag)selection;
+						setReverseNX(titles.at(i).TitleID, changeFlag);
+					});
+					
+					StatusItem2->registerAction("Show tab", brls::Key::R, [] {
+						brls::Application::popView();
+						return true;
+					});
+					
+					FullOptionsList->addView(StatusItem2);
+				}
+				
+				FullOptionsFrame->setContentView(FullOptionsList);
+				brls::Application::pushView(FullOptionsFrame);
+				return true;
 			});
 			
 			OptionsList->addView(StatusItem);
