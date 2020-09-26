@@ -37,6 +37,12 @@ char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
 NsApplicationControlData appControlData;
 
+bool isAllUpper(const std::string& word)
+{
+	for(auto& c: word) if(std::islower(static_cast<unsigned char>(c))) return false;
+    return true;
+}
+
 void RemoveReverseNX(u64 tid) {
 	if (tid == UINT64_MAX) {
 		for (uint8_t i = 0; i < 2; i++) {
@@ -329,10 +335,16 @@ int main(int argc, char *argv[])
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
-			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			double textLength = (double)titles.at(i).TitleName.size();
-			switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(20);
-			if (textLength >= 43) StatusItem->setTextSize((int)((20 / (pow(pow((textLength/43), (43/textLength)), 1.7)-0.06))));
+//			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
+			brls::SelectListItem* StatusItem = new brls::SelectListItem("DRAGON BALL XENOVERSE 2 FOR NINTENDO SWITCH", { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
+			
+//			double textLength = (double)titles.at(i).TitleName.size();
+			double textLength = 43;
+			uint8_t isCapital = 0;
+			if (isAllUpper("DRAGON BALL XENOVERSE 2 FOR NINTENDO SWITCH")) isCapital = 3;
+			switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(20 - isCapital);
+			if (textLength >= 43) StatusItem->setTextSize((int)((20 / (pow(pow((textLength/43), (43/textLength)), 1.7)-0.06))) - isCapital);
+			
 			StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
 			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
