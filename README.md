@@ -1,4 +1,4 @@
-This doc has been made for releases: ReverseNX-Tool **3.0.0**, SaltyNX **0.3.2a**
+This doc has been made for releases: ReverseNX-Tool **3.1.0**, SaltyNX **0.3.2a**
 
 ReverseNX-Tool is a tool that takes advantage of SaltyNX patches function and manages creating ReverseNX patches.
 
