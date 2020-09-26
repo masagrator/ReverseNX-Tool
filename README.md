@@ -6,8 +6,8 @@ Installed SaltyNX is obligatory.
 
 -------------
 
-![Screen1 image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen1.jpg?raw=true)
-![Screen2 image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen2.jpg?raw=true)
+![Screen1 image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen2.jpg?raw=true)
+![Screen2 image](https://github.com/masagrator/ReverseNX-Tool/blob/master/docs/Screen1.jpg?raw=true)
 
 -------------
 
