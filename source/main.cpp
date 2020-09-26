@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
 			double fontSize = (double)titles.at(i).TitleName.size();
 			if (fontSize >= 33 && fontSize < 43) StatusItem->setTextSize(20);
-			else if (fontSize >= 43) StatusItem->setTextSize((int)((20 / (pow(pow(((double)fontSize/43), (43/fontSize)), 1.7)-0.01))));
+			else if (fontSize >= 43) StatusItem->setTextSize((int)((20 / (pow(pow((fontSize/43), (43/fontSize)), 1.7)-0.06))));
 			StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
 			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
