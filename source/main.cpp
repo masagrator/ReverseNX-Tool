@@ -40,7 +40,7 @@ NsApplicationControlData appControlData;
 bool isAllUpper(const std::string& word)
 {
 	for(auto& c: word) if(std::islower(static_cast<unsigned char>(c))) return false;
-    return true;
+	return true;
 }
 
 void RemoveReverseNX(u64 tid) {
@@ -338,10 +338,11 @@ int main(int argc, char *argv[])
 			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
 			
 			double textLength = (double)titles.at(i).TitleName.size();
-			uint8_t isCapital = 0;
-			if (isAllUpper(titles.at(i).TitleName.c_str())) isCapital = 3;
-			switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(20 - isCapital);
-			if (textLength >= 43) StatusItem->setTextSize((int)((20 / (pow(pow((textLength/43), (43/textLength)), 1.7)-0.06))) - isCapital);
+			if (isAllUpper(titles.at(i).TitleName.c_str()) && textLength >= 33) StatusItem->setTextSize((int)((19 / (pow(pow((textLength/33), (33/textLength)), 1.55)-0.06))));
+			else {
+				switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(22);
+				if (textLength >= 43) StatusItem->setTextSize((int)((22 / (pow(pow((textLength/43), (43/textLength)), 2)-0.01))));
+			}
 			
 			StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
 			
