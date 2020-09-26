@@ -2,6 +2,7 @@
 #include <dirent.h>
 #include <vector>
 #include <sstream>
+#include <math.h>
 
 #include <borealis.hpp>
 #include "About_tab.hpp"
@@ -35,7 +36,6 @@ char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOp
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
 NsApplicationControlData appControlData;
-bool FullOptionsPushed = false;
 
 void RemoveReverseNX(u64 tid) {
 	if (tid == UINT64_MAX) {
@@ -297,9 +297,9 @@ int main(int argc, char *argv[])
 		brls::Logger::error("Unable to init ReverseNX-Tool");
 		return EXIT_FAILURE;
 	}
-	
 	brls::TabFrame* rootFrame = new brls::TabFrame();
 	
+	//Create patches folder if doesn't exist
 	DIR* patches_dir = opendir("sdmc:/SaltySD/patches");
 	if (patches_dir == NULL) mkdir("sdmc:/SaltySD/patches", 777);
 	else closedir(patches_dir);
@@ -325,12 +325,14 @@ int main(int argc, char *argv[])
 		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
 		OptionsList->addView(Warning);
 
-		
+		//List all titles with flags
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
 			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			
+			double fontSize = (double)titles.at(i).TitleName.size();
+			if (fontSize >= 33 && fontSize < 43) StatusItem->setTextSize(20);
+			else if (fontSize >= 43) StatusItem->setTextSize((int)((20 / (pow(pow(((double)fontSize/43), (43/fontSize)), 1.7)-0.01))));
 			StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
 			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
@@ -338,41 +340,45 @@ int main(int argc, char *argv[])
 				setReverseNX(titles.at(i).TitleID, changeFlag);
 			});
 			
-			StatusItem->registerAction("Hide tab", brls::Key::L, [titles, count] {
-				brls::AppletFrame* FullOptionsFrame = new brls::AppletFrame(true, true);	
-				FullOptionsFrame->setTitle("ReverseNX-Tool");
-				FullOptionsFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
-				brls::List* FullOptionsList = new brls::List();
-				brls::Label* Warning2 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
-				FullOptionsList->addView(Warning2);
-				for (uint32_t i = 0; i < count; i++) {
-					brls::SelectListItem* StatusItem2 = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-				
-					StatusItem2->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
-					
-					StatusItem2->getValueSelectedEvent()->subscribe([i](size_t selection) {
-						Flag changeFlag = (Flag)selection;
-						setReverseNX(titles.at(i).TitleID, changeFlag);
-					});
-					
-					StatusItem2->registerAction("Show tab", brls::Key::R, [] {
-						brls::Application::popView();
-						return true;
-					});
-					
-					FullOptionsList->addView(StatusItem2);
-				}
-				
-				FullOptionsFrame->setContentView(FullOptionsList);
-				brls::Application::pushView(FullOptionsFrame);
-				return true;
-			});
-			
 			OptionsList->addView(StatusItem);
 		}
 		
+		//Add option to hide tab using cursed method
+		OptionsList->registerAction("Hide tab", brls::Key::L, [titles, count] {
+			brls::AppletFrame* FullOptionsFrame = new brls::AppletFrame(true, true);	
+			FullOptionsFrame->setTitle("ReverseNX-Tool");
+			FullOptionsFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
+			brls::List* FullOptionsList = new brls::List();
+			brls::Label* Warning2 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
+			FullOptionsList->addView(Warning2);
+			for (uint32_t i = 0; i < count; i++) {
+				brls::SelectListItem* StatusItem2 = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
+			
+				StatusItem2->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
+				double fontSize = (double)titles.at(i).TitleName.size();
+				if (fontSize >= 43) StatusItem2->setTextSize((int)((22 / pow((fontSize/43), 0.212))));
+				
+				StatusItem2->getValueSelectedEvent()->subscribe([i](size_t selection) {
+					Flag changeFlag = (Flag)selection;
+					setReverseNX(titles.at(i).TitleID, changeFlag);
+				});
+				
+				FullOptionsList->addView(StatusItem2);
+			}
+			
+			FullOptionsList->registerAction("Show tab", brls::Key::R, [] {
+				brls::Application::popView();
+				return true;
+			});
+			
+			FullOptionsFrame->setContentView(FullOptionsList);
+			brls::Application::pushView(FullOptionsFrame);
+			return true;
+		});
+		
 		rootFrame->addTab("Games", OptionsList);
 		
+		//Settings
 		brls::List* SettingsList = new brls::List();
 		
 		brls::SelectListItem* SettingItem = new brls::SelectListItem("Enforce mode globally", { "Handheld", "Docked", "Disabled" }, (unsigned)getReverseNX(UINT64_MAX), "Option to force all games set to System in Games tab to run in one mode");
@@ -385,6 +391,7 @@ int main(int argc, char *argv[])
 		
 		rootFrame->addTab("Settings", SettingsList);
 		
+		//About (check About_tab.cpp)
 		rootFrame->addTab("About", new AboutTab());
 
 	}
