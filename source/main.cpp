@@ -335,13 +335,11 @@ int main(int argc, char *argv[])
 		uint32_t count = static_cast<uint32_t>(titles.size());
 		for (uint32_t i = 0; i < count; i++) {
 			
-//			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			brls::SelectListItem* StatusItem = new brls::SelectListItem("DRAGON BALL XENOVERSE 2 FOR NINTENDO SWITCH", { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
+			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
 			
-//			double textLength = (double)titles.at(i).TitleName.size();
-			double textLength = 43;
+			double textLength = (double)titles.at(i).TitleName.size();
 			uint8_t isCapital = 0;
-			if (isAllUpper("DRAGON BALL XENOVERSE 2 FOR NINTENDO SWITCH")) isCapital = 3;
+			if (isAllUpper(titles.at(i).TitleName.c_str())) isCapital = 3;
 			switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(20 - isCapital);
 			if (textLength >= 43) StatusItem->setTextSize((int)((20 / (pow(pow((textLength/43), (43/textLength)), 1.7)-0.06))) - isCapital);
 			
