@@ -1,7 +1,7 @@
 #include "about_tab.hpp"
 
 AboutTab::AboutTab() {		
-	brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "ReverseNX-Tool 3.1.2", false);
+	brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "ReverseNX-Tool " APP_VERSION, false);
 	this->addView(Label1);
 
 	brls::Label* Label2 = new brls::Label(brls::LabelStyle::MEDIUM, "Research & Development of ReverseNX and ReverseNX-Tool: MasaGratoR", true);
