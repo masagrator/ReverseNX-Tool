@@ -1,4 +1,4 @@
-#include "about_tab.hpp"
+#include "About_tab.hpp"
 
 AboutTab::AboutTab() {		
 	brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "ReverseNX-Tool " APP_VERSION, false);

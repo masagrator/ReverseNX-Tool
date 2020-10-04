@@ -1,29 +1,13 @@
-#include <switch.h>
 #include <dirent.h>
 #include <vector>
 #include <sstream>
-#include <math.h>
 
 #include <borealis.hpp>
-#include "About_tab.hpp"
+#include "main.hpp"
+#include "FullOptionsFrame.hpp"
+#include "TabOptionsFrame.hpp"
 
 using namespace std;
-
-enum Flag {
-	Flag_Handheld = 0,
-	Flag_Docked = 1,
-	Flag_System = 2,
-};
-
-typedef uint8_t NsApplicationIcon[0x20000];
-
-struct Title
-{
-	u64 TitleID;
-	std::string TitleName;
-	Flag ReverseNX;
-	NsApplicationIcon icon;
-};
 
 Result nsError = 0x1;
 std::vector<Title> titles;
@@ -37,6 +21,9 @@ char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOp
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
 NsApplicationControlData appControlData;
+uint32_t countGames = 0;
+Flag changeFlag = Flag_Handheld;
+bool memorySafety = false;
 
 void isFullRAM() {
 	switch(appletGetAppletType()) {
@@ -318,7 +305,6 @@ int main(int argc, char *argv[])
 		brls::Logger::error("Unable to init ReverseNX-Tool");
 		return EXIT_FAILURE;
 	}
-	brls::TabFrame* rootFrame = new brls::TabFrame();
 	
 	//Create patches folder if doesn't exist
 	DIR* patches_dir = opendir("sdmc:/SaltySD/patches");
@@ -335,102 +321,13 @@ int main(int argc, char *argv[])
 	}
 	
 	else {
-		bool memorySafety = false;
 		titles = getAllTitles();
 		isFullRAM();
 
-		// Create a sample view
-		rootFrame->setTitle("ReverseNX-Tool");
-		rootFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
-		
-		brls::List* OptionsList = new brls::List();
-		
-		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
-		OptionsList->addView(Warning);
-
-		//List all titles with flags
-		uint32_t count = static_cast<uint32_t>(titles.size());
-		if (count > 160 && isAlbum) memorySafety = true;
-		for (uint32_t i = 0; i < count; i++) {
-			brls::SelectListItem* StatusItem = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			
-			double textLength = (double)titles.at(i).TitleName.size();
-			if (isAllUpper(titles.at(i).TitleName.c_str()) && textLength >= 33) StatusItem->setTextSize((int)((19 / (pow(pow((textLength/33), (33/textLength)), 1.55)-0.06))));
-			else {
-				switch((int)textLength) case 33 ... 42: StatusItem->setTextSize(22);
-				if (textLength >= 43) StatusItem->setTextSize((int)((22 / (pow(pow((textLength/43), (43/textLength)), 2)-0.01))));
-			}
-			
-			if (memorySafety == false) StatusItem->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
-			
-			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
-				Flag changeFlag = (Flag)selection;
-				setReverseNX(titles.at(i).TitleID, changeFlag);
-			});
-			
-			OptionsList->addView(StatusItem);
-		}
-		if (memorySafety == true) brls::Application::notify("Disabled icons to prevent memory overflow.");
-		
-		//Add option to hide tab using cursed method
-		OptionsList->registerAction("Hide tab", brls::Key::L, [titles, count, memorySafety] {
-			brls::AppletFrame* FullOptionsFrame = new brls::AppletFrame(true, true);	
-			FullOptionsFrame->setTitle("ReverseNX-Tool");
-			FullOptionsFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
-			brls::List* FullOptionsList = new brls::List();
-			brls::Label* Warning2 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
-			FullOptionsList->addView(Warning2);
-			bool memorySafety2 = false;
-			if (count > 56 && isAlbum) memorySafety2 = true;
-			for (uint32_t i = 0; i < count; i++) {
-				brls::SelectListItem* StatusItem2 = new brls::SelectListItem(titles.at(i).TitleName.c_str(), { "Handheld", "Docked", "System" }, (unsigned)titles.at(i).ReverseNX);
-			
-				if (memorySafety2 == false) StatusItem2->setThumbnail(titles.at(i).icon, sizeof(titles.at(i).icon));
-				double textLength = (double)titles.at(i).TitleName.size();
-				if (textLength >= 43) StatusItem2->setTextSize((int)((22 / pow((textLength/43), 0.212))));
-				
-				StatusItem2->getValueSelectedEvent()->subscribe([i](size_t selection) {
-					Flag changeFlag = (Flag)selection;
-					setReverseNX(titles.at(i).TitleID, changeFlag);
-				});
-				
-				FullOptionsList->addView(StatusItem2);
-			}
-			
-			FullOptionsList->registerAction("Show tab", brls::Key::R, [] {
-				brls::Application::popView();
-				return true;
-			});
-			
-			if (memorySafety2 == true && memorySafety == false) brls::Application::notify("Disabled icons to prevent memory overflow.");
-			
-			FullOptionsFrame->setContentView(FullOptionsList);
-			brls::Application::pushView(FullOptionsFrame);
-			return true;
-		});
-		
-		rootFrame->addTab("Games", OptionsList);
-		
-		//Settings
-		brls::List* SettingsList = new brls::List();
-		
-		brls::SelectListItem* SettingItem = new brls::SelectListItem("Enforce mode globally", { "Handheld", "Docked", "Disabled" }, (unsigned)getReverseNX(UINT64_MAX), "Option to force all games set to System in Games tab to run in one mode");
-		SettingItem->getValueSelectedEvent()->subscribe([](size_t selection) {
-				Flag changeFlag = (Flag)selection;
-				setReverseNX(UINT64_MAX, changeFlag);
-		});
-		
-		SettingsList->addView(SettingItem);
-		
-		rootFrame->addTab("Settings", SettingsList);
-		
-		//About (check About_tab.cpp)
-		rootFrame->addTab("About", new AboutTab());
-
+		// Add the root view to the stack
+		brls::Application::pushView(new TabOptionsFrame());
 	}
 
-	// Add the root view to the stack
-	brls::Application::pushView(rootFrame);
 
 	// Run the app
 	while (brls::Application::mainLoop());
