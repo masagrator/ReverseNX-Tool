@@ -46,11 +46,9 @@ bool isAllUpper(const std::string& word)
 }
 
 void RemoveReverseNX(u64 tid) {
-	if (tid == UINT64_MAX) {
-		for (uint8_t i = 0; i < 2; i++) {
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
-			remove(ReverseNX);
-		}
+	if (tid == UINT64_MAX) for (uint8_t i = 0; i < 2; i++) {
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
+		remove(ReverseNX);
 	}
 	else for (uint8_t i = 0; i < 2; i++) {
 		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
