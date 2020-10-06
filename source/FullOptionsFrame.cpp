@@ -3,9 +3,12 @@
 FullOptionsFrame::FullOptionsFrame() : AppletFrame(true, true) {		
 	this->setTitle("ReverseNX-Tool");
 	this->setIcon(BOREALIS_ASSET("icon.jpg"));
+	
 	brls::List* FullOptionsList = new brls::List();
+	
 	brls::Label* Warning2 = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
 	FullOptionsList->addView(Warning2);
+	
 	bool memorySafety2 = false;
 	if (countGames > 56 && isAlbum) memorySafety2 = true;
 	for (uint32_t i = 0; i < countGames; i++) {
@@ -28,6 +31,6 @@ FullOptionsFrame::FullOptionsFrame() : AppletFrame(true, true) {
 		return true;
 	});
 			
-	if (memorySafety2 == true && memorySafety == false) brls::Application::notify("Disabled icons to prevent memory overflow.");
+	if (memorySafety2 && !memorySafety) brls::Application::notify("Disabled icons to prevent memory overflow.");
 	this->setContentView(FullOptionsList);
 }
