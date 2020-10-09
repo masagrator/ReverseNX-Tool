@@ -1,6 +1,5 @@
 #include <dirent.h>
 #include <vector>
-#include <sstream>
 
 #include <borealis.hpp>
 #include "main.hpp"
@@ -9,7 +8,6 @@
 
 using namespace std;
 
-Result nsError = 0x1;
 std::vector<Title> titles;
 
 uint8_t Docked[0x10] = {0xE0, 0x03, 0x00, 0x32, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -110,23 +108,18 @@ void setReverseNX(uint64_t tid, Flag changedFlag) {
 }
 
 Flag getReverseNX(uint64_t tid) {
+	uint8_t cmpresult = 0;
+	
 	if (tid == UINT64_MAX) {
 		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[0]);
 		FILE* asem = fopen(ReverseNX, "r");
+		
 		if (asem != NULL) {
 			fread(&filebuffer, 1, 16, asem);
-			int c = 0;
-			while (c < 16) {
-				if (filebuffer[c] == Handheld[c]) c++;
-				else break;
-			}
-			if (c != 16) {
-				c = 0;
-				while (c < 16) {
-					if (filebuffer[c] == Docked[c]) c++;
-					else break;
-				}
-				if (c != 16) {
+			cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+			if (cmpresult != 0) {
+				cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+				if (cmpresult != 0) {
 					fclose(asem);
 					RemoveReverseNX(tid);
 					return Flag_System;
@@ -135,28 +128,20 @@ Flag getReverseNX(uint64_t tid) {
 			}
 			else handheldflag = true;
 			fclose(asem);
-				
+
 			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[1]);
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fread(&filebuffer, 1, 16, asem);
-				c = 0;
-				while (c < 16) {
-					if (filebuffer[c] == Handheld[c]) c++;
-					else break;
-				}
-				if (c == 16 && handheldflag == true) {
+				cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+				if (cmpresult == 0 && handheldflag == true) {
 					fclose(asem);
 					return Flag_Handheld;
 				}
 				else {
-					c = 0;
-					while (c < 16) {
-						if (filebuffer[c] == Docked[c]) c++;
-						else break;
-					}
+					cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
 					fclose(asem);
-					if (c == 16 && dockedflag == true) return Flag_Docked;
+					if (cmpresult == 0 && dockedflag == true) return Flag_Docked;
 					else {
 						RemoveReverseNX(tid);
 						return Flag_System;
@@ -164,6 +149,7 @@ Flag getReverseNX(uint64_t tid) {
 				}
 			}
 		}
+		
 		else {
 			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
 			asem = fopen(ReverseNX, "r");
@@ -175,23 +161,16 @@ Flag getReverseNX(uint64_t tid) {
 			else return Flag_System;
 		}
 	}
+	
 	else {
 		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[0]);
 		FILE* asem = fopen(ReverseNX, "r");
 		if (asem != NULL) {
 			fread(&filebuffer, 1, 16, asem);
-			int c = 0;
-			while (c < 16) {
-				if (filebuffer[c] == Handheld[c]) c++;
-				else break;
-			}
-			if (c != 16) {
-				c = 0;
-				while (c < 16) {
-					if (filebuffer[c] == Docked[c]) c++;
-					else break;
-				}
-				if (c != 16) {
+			cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+			if (cmpresult != 0) {
+				cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+				if (cmpresult != 0) {
 					fclose(asem);
 					RemoveReverseNX(tid);
 					return Flag_System;
@@ -205,23 +184,15 @@ Flag getReverseNX(uint64_t tid) {
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fread(&filebuffer, 1, 16, asem);
-				c = 0;
-				while (c < 16) {
-					if (filebuffer[c] == Handheld[c]) c++;
-					else break;
-				}
-				if (c == 16 && handheldflag == true) {
+				cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+				if (cmpresult == 0 && handheldflag == true) {
 					fclose(asem);
 					return Flag_Handheld;
 				}
 				else {
-					c = 0;
-					while (c < 16) {
-						if (filebuffer[c] == Docked[c]) c++;
-						else break;
-					}
+					cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
 					fclose(asem);
-					if (c == 16 && dockedflag == true) return Flag_Docked;
+					if (cmpresult == 0 && dockedflag == true) return Flag_Docked;
 					else {
 						RemoveReverseNX(tid);
 						return Flag_System;
@@ -245,26 +216,22 @@ Flag getReverseNX(uint64_t tid) {
 
 string getAppName(uint64_t Tid)
 {
-	size_t appControlDataSize = 0;
-	NacpLanguageEntry *languageEntry = nullptr;
-	Result rc;
-
 	memset(&appControlData, 0x0, sizeof(NsApplicationControlData));
-
-	rc = nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize);
-	if (R_FAILED(rc))
-	{
-		stringstream ss;
-		ss << 0 << hex << uppercase << Tid;
-		return ss.str();
+	
+	size_t appControlDataSize = 0;
+	if (R_FAILED(nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize))) {
+		char returnTID[17];
+		sprintf(returnTID, "%016" PRIx64, Tid);
+		return (std::string)returnTID;
 	}
-	rc = nacpGetLanguageEntry(&appControlData.nacp, &languageEntry);
-	if (R_FAILED(rc))
-	{
-		stringstream ss;
-		ss << 0 << hex << uppercase << Tid;
-		return ss.str();
+	
+	NacpLanguageEntry *languageEntry = nullptr;
+	if (R_FAILED(nacpGetLanguageEntry(&appControlData.nacp, &languageEntry))) {
+		char returnTID[17];
+		sprintf(returnTID, "%016" PRIx64, Tid);
+		return (std::string)returnTID;
 	}
+	
 	return string(languageEntry->name);
 }
 
@@ -272,7 +239,7 @@ vector<Title> getAllTitles()
 {
 	vector<Title> apps;
 	NsApplicationRecord *appRecords = new NsApplicationRecord[1024]; // Nobody's going to have more than 1024 games hopefully...
-	s32 actualAppRecordCnt = 0;
+	int32_t actualAppRecordCnt = 0;
 	Result rc;
 	rc = nsListApplicationRecord(appRecords, 1024, 0, &actualAppRecordCnt);
 	if (R_FAILED(rc))
@@ -281,7 +248,7 @@ vector<Title> getAllTitles()
 		exit(rc);
 	}
 
-	for (s32 i = 0; i < actualAppRecordCnt; i++)
+	for (int32_t i = 0; i < actualAppRecordCnt; i++)
 	{
 		Title title;
 		title.TitleID = appRecords[i].application_id;
@@ -309,13 +276,12 @@ int main(int argc, char *argv[])
 	if (patches_dir == NULL) mkdir("sdmc:/SaltySD/patches", 777);
 	else closedir(patches_dir);
 	
-	nsError = nsInitialize();
+	Result nsError = nsInitialize();
 		
 	if (R_FAILED(nsError)) {
 		char Error[64];
 		sprintf(Error, "nsInitialize error: 0x%08x\nApplication will be closed.", (uint32_t)nsError);
-		std::string stdError = Error;
-		brls::Application::crash(stdError);
+		brls::Application::crash((std::string)Error);
 	}
 	
 	else {
