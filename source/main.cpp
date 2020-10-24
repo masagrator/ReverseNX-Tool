@@ -235,30 +235,30 @@ string getAppName(uint64_t Tid)
 	return string(languageEntry->name);
 }
 
-vector<Title> getAllTitles()
+std::vector<Title> getAllTitles()
 {
-	vector<Title> apps;
-	NsApplicationRecord *appRecords = new NsApplicationRecord[1024]; // Nobody's going to have more than 1024 games hopefully...
-	int32_t actualAppRecordCnt = 0;
-	Result rc;
-	rc = nsListApplicationRecord(appRecords, 1024, 0, &actualAppRecordCnt);
-	if (R_FAILED(rc))
-	{
-		while (brls::Application::mainLoop());
-		exit(rc);
-	}
+  std::vector<Title> apps;
+  NsApplicationRecord appRecords = {};
+  int32_t actualAppRecordCnt = 0;
+  Result rc;
 
-	for (int32_t i = 0; i < actualAppRecordCnt; i++)
-	{
-		Title title;
-		title.TitleID = appRecords[i].application_id;
-		title.TitleName = getAppName(appRecords[i].application_id);
-		title.ReverseNX = getReverseNX(appRecords[i].application_id);
-		memcpy(&title.icon, appControlData.icon, sizeof(title.icon));
-		apps.push_back(title);
-	}
-	delete[] appRecords;
-	return apps;
+  while (1)
+  {
+    static int32_t offset = 0;
+    rc = nsListApplicationRecord(&appRecords, 1, offset, &actualAppRecordCnt);
+    if (R_FAILED(rc) || (actualAppRecordCnt < 1) || (offset >= count)) break;
+    if (appRecords.application_id != 0) {
+        Title title;
+        title.TitleID = appRecords.application_id;
+        title.TitleName = getAppName(appRecords.application_id);
+        title.TitleAuthor = getAppAuthor(appRecords.application_id);
+        memcpy(&title.icon, appControlData.icon, sizeof(title.icon));
+        apps.push_back(title);
+    }
+    offset++;
+    appRecords = {};
+  }
+  return apps;
 }
 
 int main(int argc, char *argv[])
