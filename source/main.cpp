@@ -252,6 +252,7 @@ std::vector<Title> getAllTitles(int32_t count)
         title.TitleID = appRecords.application_id;
         title.TitleName = getAppName(appRecords.application_id);
         title.TitleAuthor = getAppAuthor(appRecords.application_id);
+	title.ReverseNX = getReverseNX(appRecords.application_id);
         memcpy(&title.icon, appControlData.icon, sizeof(title.icon));
         apps.push_back(title);
     }
