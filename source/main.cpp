@@ -235,7 +235,7 @@ string getAppName(uint64_t Tid)
 	return string(languageEntry->name);
 }
 
-std::vector<Title> getAllTitles()
+std::vector<Title> getAllTitles(int32_t count)
 {
   std::vector<Title> apps;
   NsApplicationRecord appRecords = {};
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 	}
 	
 	else {
-		titles = getAllTitles();
+		titles = getAllTitles(INT32_MAX);
 		isFullRAM();
 
 		// Add the root view to the stack
