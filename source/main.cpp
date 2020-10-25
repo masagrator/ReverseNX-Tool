@@ -9,6 +9,7 @@
 using namespace std;
 
 std::vector<Title> titles;
+NsApplicationControlData appControlData;
 
 uint8_t Docked[0x10] = {0xE0, 0x03, 0x00, 0x32, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 uint8_t Handheld[0x10] = {0x00, 0x00, 0xA0, 0x52, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -18,7 +19,6 @@ bool isAlbum = false;
 char Files[2][38] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64" };
 char ReverseNX[128];
 uint8_t filebuffer[0x10] = {0};
-NsApplicationControlData appControlData;
 uint32_t countGames = 0;
 Flag changeFlag = Flag_Handheld;
 bool memorySafety = false;
@@ -214,10 +214,18 @@ Flag getReverseNX(uint64_t tid) {
 	return Flag_System;
 }
 
+void getAppIcon(uint64_t Tid, void* iconBufferPtr)
+{	
+	size_t appControlDataSize = 0;
+	if (R_FAILED(nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize))) {
+		return;
+	}
+	memcpy(iconBufferPtr, appControlData.icon, sizeof(appControlData.icon));
+	return;
+}
+
 string getAppName(uint64_t Tid)
 {
-	memset(&appControlData, 0x0, sizeof(NsApplicationControlData));
-	
 	size_t appControlDataSize = 0;
 	if (R_FAILED(nsGetApplicationControlData(NsApplicationControlSource::NsApplicationControlSource_Storage, Tid, &appControlData, sizeof(NsApplicationControlData), &appControlDataSize))) {
 		char returnTID[17];
@@ -252,7 +260,7 @@ std::vector<Title> getTitles(int32_t count)
         title.TitleID = appRecords.application_id;
         title.TitleName = getAppName(appRecords.application_id);
 	    title.ReverseNX = getReverseNX(appRecords.application_id);
-        memcpy(&title.icon, appControlData.icon, sizeof(title.icon));
+        getAppIcon(appRecords.application_id, &title.icon);
         apps.push_back(title);
     }
     offset++;
@@ -275,6 +283,7 @@ int main(int argc, char *argv[])
 	DIR* patches_dir = opendir("sdmc:/SaltySD/patches");
 	if (patches_dir == NULL) mkdir("sdmc:/SaltySD/patches", 777);
 	else closedir(patches_dir);
+	memset(&appControlData, 0x0, sizeof(NsApplicationControlData));
 	
 	Result nsError = nsInitialize();
 		
