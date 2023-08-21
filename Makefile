@@ -45,7 +45,7 @@ DATA		:=	data
 INCLUDES	:=	include
 APP_TITLE   :=  ReverseNX-Tool
 APP_AUTHOR  :=  MasaGratoR
-APP_VERSION :=  3.1.2
+APP_VERSION :=  3.1.3
 ROMFS		:=	romfs
 
 ROMFS				:=	res/
