@@ -7,7 +7,7 @@ TabOptionsFrame::TabOptionsFrame() : TabFrame() {
 		
 		brls::List* OptionsList = new brls::List();
 		
-		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is 32-bit or exists in exceptions list will be ignored by SaltyNX.", true);
+		brls::Label* Warning = new brls::Label(brls::LabelStyle::DESCRIPTION, "Any game on this list that is in exceptions list will be ignored by SaltyNX.", true);
 		OptionsList->addView(Warning);
 
 		//List all titles with flags
@@ -27,7 +27,8 @@ TabOptionsFrame::TabOptionsFrame() : TabFrame() {
 			
 			StatusItem->getValueSelectedEvent()->subscribe([i](size_t selection) {
 				changeFlag = (Flag)selection;
-				setReverseNX(titles.at(i).TitleID, changeFlag);
+				setReverseNX(titles.at(i).TitleID, changeFlag, true);
+				setReverseNX(titles.at(i).TitleID, changeFlag, false);
 			});
 			
 			OptionsList->addView(StatusItem);
@@ -48,7 +49,8 @@ TabOptionsFrame::TabOptionsFrame() : TabFrame() {
 		brls::SelectListItem* SettingItem = new brls::SelectListItem("Enforce mode globally", { "Handheld", "Docked", "Disabled" }, (unsigned)getReverseNX(UINT64_MAX), "Option to force all games set to System in Games tab to run in one mode");
 		SettingItem->getValueSelectedEvent()->subscribe([](size_t selection) {
 				Flag changeFlag = (Flag)selection;
-				setReverseNX(UINT64_MAX, changeFlag);
+				setReverseNX(UINT64_MAX, changeFlag, true);
+				setReverseNX(UINT64_MAX, changeFlag, false);
 		});
 		
 		SettingsList->addView(SettingItem);

@@ -37,19 +37,18 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-TARGET		:=	ReverseNX-Tool
-ICON		:=	res/icon.jpg
-BUILD		:=	build
-SOURCES		:=	source
+TARGET		:=	borealis_example
+BUILD		:=	build.nx
+SOURCES		:=	example
 DATA		:=	data
-INCLUDES	:=	include
-APP_TITLE   :=  ReverseNX-Tool
-APP_AUTHOR  :=  MasaGratoR
-APP_VERSION :=  3.2.0
-ROMFS		:=	romfs
+ICON		:=	resources/icon/borealis.jpg
+INCLUDES	:=	example
+APP_TITLE	:=	borealis example
+APP_AUTHOR	:=	natinusala
+APP_VERSION	:=	1.0
 
-ROMFS				:=	res/
-BOREALIS_PATH		:=	libs/borealis2
+ROMFS				:=	resources
+BOREALIS_PATH		:=	.
 BOREALIS_RESOURCES	:=	romfs:/
 
 #---------------------------------------------------------------------------------
@@ -61,16 +60,14 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__ \
-			-DBOREALIS_RESOURCES="\"$(BOREALIS_RESOURCES)\"" \
-			-DAPP_VERSION="\"$(APP_VERSION)\"" \
-			-DAPP_TITLE="\"$(APP_TITLE)\"" -DAPP_TITLE_LOWER="\"$(TARGET)\""
+			-DBOREALIS_RESOURCES="\"$(BOREALIS_RESOURCES)\""
 
 CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx 
+LIBS	:= -lnx -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -78,7 +75,7 @@ LIBS	:= -lnx
 #---------------------------------------------------------------------------------
 LIBDIRS	:= $(PORTLIBS) $(LIBNX)
 
-include $(TOPDIR)/libs/borealis/library/borealis.mk
+include $(TOPDIR)/library/borealis.mk
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

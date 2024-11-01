@@ -11,14 +11,19 @@ using namespace std;
 std::vector<Title> titles;
 NsApplicationControlData appControlData;
 
-uint8_t Docked[0x10] = {0xE0, 0x03, 0x00, 0x32, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-uint8_t Handheld[0x10] = {0x00, 0x00, 0xA0, 0x52, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-uint8_t DockedDefaultResolution[] = {0x02, 0xF0, 0x80, 0x52, 0x03, 0x87, 0x80, 0x52, 0x02, 0x00, 0x00, 0xB9, 0x23, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x80, 0xD2, 0xC0, 0x03, 0x5F, 0xD6};
-uint8_t HandheldDefaultResolution[] = {0x02, 0xA0, 0x80, 0x52, 0x03, 0x5A, 0x80, 0x52, 0x02, 0x00, 0x00, 0xB9, 0x23, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x80, 0xD2, 0xC0, 0x03, 0x5F, 0xD6};
+uint8_t Docked_64[] = {0xE0, 0x03, 0x00, 0x32, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t Handheld_64[] = {0x00, 0x00, 0x80, 0x52, 0xC0, 0x03, 0x5F, 0xD6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t DockedDefaultResolution_64[] = {0x02, 0xF0, 0x80, 0x52, 0x03, 0x87, 0x80, 0x52, 0x02, 0x00, 0x00, 0xB9, 0x23, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x80, 0xD2, 0xC0, 0x03, 0x5F, 0xD6};
+uint8_t HandheldDefaultResolution_64[] = {0x02, 0xA0, 0x80, 0x52, 0x03, 0x5A, 0x80, 0x52, 0x02, 0x00, 0x00, 0xB9, 0x23, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x80, 0xD2, 0xC0, 0x03, 0x5F, 0xD6};
+uint8_t Docked_32[] = {0x01, 0x00, 0xA0, 0xE3, 0x1E, 0xFF, 0x2F, 0xE1};
+uint8_t Handheld_32[] = {0x00, 0x00, 0xA0, 0xE3, 0x1E, 0xFF, 0x2F, 0xE1};
+uint8_t DockedDefaultResolution_32[] = {0x1E, 0x2D, 0xA0, 0xE3, 0x38, 0x34, 0x00, 0xE3, 0x00, 0x20, 0x80, 0xE5, 0x00, 0x30, 0x81, 0xE5, 0x00, 0x00, 0xA0, 0xE3, 0x1E, 0xFF, 0x2F, 0xE1};
+uint8_t HandheldDefaultResolution_32[] = {0x05, 0x2C, 0xA0, 0xE3, 0x2D, 0x3E, 0xA0, 0xE3, 0x00, 0x20, 0x80, 0xE5, 0x00, 0x30, 0x81, 0xE5, 0x00, 0x00, 0xA0, 0xE3, 0x1E, 0xFF, 0x2F, 0xE1};
 bool dockedflag = false;
 bool handheldflag = false;
 bool isAlbum = false;
-char Files[3][51] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64", "_ZN2nn2oe27GetDefaultDisplayResolutionEPiS1_.asm64"};
+char Files_64[3][51] = { "_ZN2nn2oe18GetPerformanceModeEv.asm64", "_ZN2nn2oe16GetOperationModeEv.asm64", "_ZN2nn2oe27GetDefaultDisplayResolutionEPiS1_.asm64"};
+char Files_32[3][51] = { "_ZN2nn2oe18GetPerformanceModeEv.asm32", "_ZN2nn2oe16GetOperationModeEv.asm32", "_ZN2nn2oe27GetDefaultDisplayResolutionEPiS1_.asm32"};
 char ReverseNX[192];
 uint8_t filebuffer[0x10] = {0};
 uint32_t countGames = 0;
@@ -47,30 +52,37 @@ bool isAllUpper(const std::string& word)
 
 void RemoveReverseNX(u64 tid) {
 	if (tid == UINT64_MAX) for (uint8_t i = 0; i < 3; i++) {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_64[i]);
+		remove(ReverseNX);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_32[i]);
 		remove(ReverseNX);
 	}
 	else for (uint8_t i = 0; i < 3; i++) {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[i]);
+		remove(ReverseNX);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_32[i]);
 		remove(ReverseNX);
 	}
 	brls::Application::notify("Found and deleted broken patches.");
 }
 
-void setReverseNX(uint64_t tid, Flag changedFlag) {
+void setReverseNX(uint64_t tid, Flag changedFlag, bool bit32) {
 	
 	for (uint8_t i = 0; i < 2; i++) {
 		if (tid == UINT64_MAX) {
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[i]);
+			if (!bit32) snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_64[i]);
+			else snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_32[i]);
 			FILE* asem = fopen(ReverseNX, "wb");
 			switch(changedFlag) {
 				case Flag_Handheld:
-					fwrite(Handheld, 1, 16, asem);
+					if (!bit32) fwrite(Handheld_64, 1, sizeof(Handheld_64), asem);
+					else fwrite(Handheld_32, 1, sizeof(Handheld_32), asem);
 					fclose(asem);
 					break;
 				
 				case Flag_Docked:
-					fwrite(Docked, 1, 16, asem);
+					if (!bit32) fwrite(Docked_64, 1, sizeof(Docked_64), asem);
+					else fwrite(Docked_32, 1, sizeof(Docked_32), asem);
 					fclose(asem);
 					break;
 				
@@ -86,16 +98,19 @@ void setReverseNX(uint64_t tid, Flag changedFlag) {
 			DIR* patchdir = opendir(ReverseNX);
 			if (patchdir == NULL) mkdir(ReverseNX, 777);
 			else closedir(patchdir);
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[i]);
+			if (!bit32) snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[i]);
+			else snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_32[i]);
 			FILE* asem = fopen(ReverseNX, "wb");
 			switch(changedFlag) {
 				case Flag_Handheld:
-					fwrite(Handheld, 1, 16, asem);
+					if (!bit32) fwrite(Handheld_64, 1, sizeof(Handheld_64), asem);
+					else fwrite(Handheld_32, 1, sizeof(Handheld_32), asem);
 					fclose(asem);
 					break;
 				
 				case Flag_Docked:
-					fwrite(Docked, 1, 16, asem);
+					if (!bit32) fwrite(Docked_64, 1, sizeof(Docked_64), asem);
+					else fwrite(Docked_32, 1, sizeof(Docked_32), asem);
 					fclose(asem);
 					break;
 				
@@ -108,16 +123,19 @@ void setReverseNX(uint64_t tid, Flag changedFlag) {
 		}
 	}
 	if (tid == UINT64_MAX) {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[2]);
+		if (!bit32) snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_64[2]);
+		else snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_32[2]);
 		FILE* asem = fopen(ReverseNX, "wb");
 		switch(changedFlag) {
 			case Flag_Handheld:
-				fwrite(HandheldDefaultResolution, 1, sizeof(HandheldDefaultResolution), asem);
+				if (!bit32) fwrite(HandheldDefaultResolution_64, 1, sizeof(HandheldDefaultResolution_64), asem);
+				else fwrite(HandheldDefaultResolution_32, 1, sizeof(HandheldDefaultResolution_32), asem);
 				fclose(asem);
 				break;
 			
 			case Flag_Docked:
-				fwrite(DockedDefaultResolution, 1, sizeof(DockedDefaultResolution), asem);
+				if (!bit32) fwrite(DockedDefaultResolution_64, 1, sizeof(DockedDefaultResolution_64), asem);
+				else fwrite(DockedDefaultResolution_32, 1, sizeof(DockedDefaultResolution_32), asem);
 				fclose(asem);
 				break;
 			
@@ -133,16 +151,19 @@ void setReverseNX(uint64_t tid, Flag changedFlag) {
 		DIR* patchdir = opendir(ReverseNX);
 		if (patchdir == NULL) mkdir(ReverseNX, 777);
 		else closedir(patchdir);
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[2]);
+		if (!bit32) snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[2]);
+		else snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_32[2]);
 		FILE* asem = fopen(ReverseNX, "wb");
 		switch(changedFlag) {
 			case Flag_Handheld:
-				fwrite(HandheldDefaultResolution, 1, sizeof(HandheldDefaultResolution), asem);
+				if (!bit32) fwrite(HandheldDefaultResolution_64, 1, sizeof(HandheldDefaultResolution_64), asem);
+				else fwrite(HandheldDefaultResolution_32, 1, sizeof(HandheldDefaultResolution_32), asem);
 				fclose(asem);
 				break;
 			
 			case Flag_Docked:
-				fwrite(DockedDefaultResolution, 1, sizeof(DockedDefaultResolution), asem);
+				if (!bit32) fwrite(DockedDefaultResolution_64, 1, sizeof(DockedDefaultResolution_64), asem);
+				else fwrite(DockedDefaultResolution_32, 1, sizeof(DockedDefaultResolution_32), asem);
 				fclose(asem);
 				break;
 			
@@ -159,14 +180,14 @@ Flag getReverseNX(uint64_t tid) {
 	uint8_t cmpresult = 0;
 	
 	if (tid == UINT64_MAX) {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[0]);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_64[0]);
 		FILE* asem = fopen(ReverseNX, "r");
 		
 		if (asem != NULL) {
 			fread(&filebuffer, 1, 16, asem);
-			cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+			cmpresult = memcmp(filebuffer, Handheld_64, sizeof(Handheld_64));
 			if (cmpresult != 0) {
-				cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+				cmpresult = memcmp(filebuffer, Docked_64, sizeof(Docked_64));
 				if (cmpresult != 0) {
 					fclose(asem);
 					RemoveReverseNX(tid);
@@ -177,17 +198,17 @@ Flag getReverseNX(uint64_t tid) {
 			else handheldflag = true;
 			fclose(asem);
 
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files[1]);
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%s", Files_64[1]);
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fread(&filebuffer, 1, 16, asem);
-				cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+				cmpresult = memcmp(filebuffer, Handheld_64, sizeof(Handheld_64));
 				if (cmpresult == 0 && handheldflag == true) {
 					fclose(asem);
 					return Flag_Handheld;
 				}
 				else {
-					cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+					cmpresult = memcmp(filebuffer, Docked_64, sizeof(Docked_64));
 					fclose(asem);
 					if (cmpresult == 0 && dockedflag == true) return Flag_Docked;
 					else {
@@ -199,7 +220,7 @@ Flag getReverseNX(uint64_t tid) {
 		}
 		
 		else {
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[1]);
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fclose(asem);
@@ -211,13 +232,13 @@ Flag getReverseNX(uint64_t tid) {
 	}
 	
 	else {
-		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[0]);
+		snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[0]);
 		FILE* asem = fopen(ReverseNX, "r");
 		if (asem != NULL) {
 			fread(&filebuffer, 1, 16, asem);
-			cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+			cmpresult = memcmp(filebuffer, Handheld_64, sizeof(Handheld_64));
 			if (cmpresult != 0) {
-				cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+				cmpresult = memcmp(filebuffer, Docked_64, sizeof(Docked_64));
 				if (cmpresult != 0) {
 					fclose(asem);
 					RemoveReverseNX(tid);
@@ -228,17 +249,17 @@ Flag getReverseNX(uint64_t tid) {
 			else handheldflag = true;
 			fclose(asem);
 				
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[1]);
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fread(&filebuffer, 1, 16, asem);
-				cmpresult = memcmp(filebuffer, Handheld, sizeof(Handheld));
+				cmpresult = memcmp(filebuffer, Handheld_64, sizeof(Handheld_64));
 				if (cmpresult == 0 && handheldflag == true) {
 					fclose(asem);
 					return Flag_Handheld;
 				}
 				else {
-					cmpresult = memcmp(filebuffer, Docked, sizeof(Docked));
+					cmpresult = memcmp(filebuffer, Docked_64, sizeof(Docked_64));
 					fclose(asem);
 					if (cmpresult == 0 && dockedflag == true) return Flag_Docked;
 					else {
@@ -249,7 +270,7 @@ Flag getReverseNX(uint64_t tid) {
 			}
 		}
 		else {
-			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files[1]);
+			snprintf(ReverseNX, sizeof ReverseNX, "sdmc:/SaltySD/patches/%016" PRIx64 "/%s", tid, Files_64[1]);
 			asem = fopen(ReverseNX, "r");
 			if (asem != NULL) {
 				fclose(asem);

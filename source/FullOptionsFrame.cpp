@@ -20,7 +20,8 @@ FullOptionsFrame::FullOptionsFrame() : AppletFrame(true, true) {
 				
 		StatusItem2->getValueSelectedEvent()->subscribe([i](size_t selection) {
 			Flag changeFlag = (Flag)selection;
-			setReverseNX(titles.at(i).TitleID, changeFlag);
+			setReverseNX(titles.at(i).TitleID, changeFlag, true);
+			setReverseNX(titles.at(i).TitleID, changeFlag, false);
 		});
 				
 		FullOptionsList->addView(StatusItem2);
