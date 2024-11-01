@@ -45,11 +45,11 @@ DATA		:=	data
 INCLUDES	:=	include
 APP_TITLE   :=  ReverseNX-Tool
 APP_AUTHOR  :=  MasaGratoR
-APP_VERSION :=  3.1.3
+APP_VERSION :=  3.2.0
 ROMFS		:=	romfs
 
 ROMFS				:=	res/
-BOREALIS_PATH		:=	libs/borealis
+BOREALIS_PATH		:=	libs/borealis2
 BOREALIS_RESOURCES	:=	romfs:/
 
 #---------------------------------------------------------------------------------
